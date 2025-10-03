@@ -8,7 +8,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
-    "pack-all": "pnpm -r build && pnpm -r --filter !. pack"
+    "build": "tsc -b",
+    "pack-all": "pnpm build && pnpm -r --filter !. pack"
   },
   "keywords": [],
   "author": "",
