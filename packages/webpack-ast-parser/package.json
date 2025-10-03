@@ -1,6 +1,6 @@
 {
   "name": "@vencord-companion/webpack-ast-parser",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -10,8 +10,8 @@
   },
   "keywords": [],
   "author": {
-     "name": "sadan",
-     "url": "https://sadan.zip"
+    "name": "sadan",
+    "url": "https://sadan.zip"
   },
   "exports": {
     "./*": "./dist/*.js"
