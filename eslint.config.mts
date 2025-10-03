@@ -585,49 +585,54 @@ const StyleRules: Partial<IStyleRules> = {
 
 const extensions = "{js,mjs,cjs,jsx,mjsx,cjsx,ts,mts,cts,tsx,mtsx,ctsx}";
 
-export default defineConfig({ ignores: ["**/dist", "node_modules", "**/__test__/**", "packages/vencord-ast-parser/src/__test__/.vencord-source/**"] }, {
-    files: [`eslint.config.${extensions}`, `packages/**/*.${extensions}`],
-    plugins: {
-        "@stylistic": stylistic as any,
-        "@typescript-eslint": TSEslint.plugin,
-        "simple-import-sort": simpleImportSort,
-        "unused-imports": unusedImports,
-        unicorn: eslintPluginUnicorn,
+export default defineConfig(
+    {
+        ignores: ["**/dist", "node_modules", "**/__test__/**", "packages/vencord-ast-parser/src/__test__/.vencord-source/**"],
     },
-    languageOptions: {
-        parser: TSEslint.parser,
-        parserOptions: {
-            projectService: true,
-            tsconfigRootDir: import.meta.dirname,
+    {
+        files: [`eslint.config.${extensions}`, `packages/**/*.${extensions}`],
+        plugins: {
+            "@stylistic": stylistic as any,
+            "@typescript-eslint": TSEslint.plugin,
+            "simple-import-sort": simpleImportSort,
+            "unused-imports": unusedImports,
+            unicorn: eslintPluginUnicorn,
+        },
+        languageOptions: {
+            parser: TSEslint.parser,
+            parserOptions: {
+                projectService: true,
+                tsconfigRootDir: import.meta.dirname,
+            },
+        },
+        rules: {
+            ...ESLintRules,
+            ...TSLintRules,
+            ...StyleRules,
+            "unused-imports/no-unused-imports": "error",
+            "unused-imports/no-unused-vars": [
+                "warn",
+                {
+                    vars: "all",
+                    varsIgnorePattern: "^_",
+                    args: "after-used",
+                    argsIgnorePattern: "^_",
+                },
+            ],
+            // Plugin Rules
+            "simple-import-sort/imports": [
+                "error",
+                {
+                    groups: [
+                        ["^"],
+                        ["^node:.*$"],
+                        ["^@vencord-companion/"],
+                        ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$", "^\\.\\.(?!/?$)", "^\\.\\./?$"],
+                    ],
+                },
+            ],
+            "simple-import-sort/exports": "error",
+            "unicorn/prefer-node-protocol": ["error"],
         },
     },
-    rules: {
-        ...ESLintRules,
-        ...TSLintRules,
-        ...StyleRules,
-        "unused-imports/no-unused-imports": "error",
-        "unused-imports/no-unused-vars": [
-            "warn",
-            {
-                vars: "all",
-                varsIgnorePattern: "^_",
-                args: "after-used",
-                argsIgnorePattern: "^_",
-            },
-        ],
-        // Plugin Rules
-        "simple-import-sort/imports": [
-            "error",
-            {
-                groups: [
-                    ["^"],
-                    ["^node:.*$"],
-                    ["^@vencord-companion/"],
-                    ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$", "^\\.\\.(?!/?$)", "^\\.\\./?$"],
-                ],
-            },
-        ],
-        "simple-import-sort/exports": "error",
-        "unicorn/prefer-node-protocol": ["error"],
-    },
-});
+) satisfies ReturnType<typeof defineConfig> as ReturnType<typeof defineConfig>;

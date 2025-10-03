@@ -5,9 +5,11 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:ui": "vitest --ui",
+    "pre_test": "pnpm build-all",
+    "_test": "vitest",
+    "test": "pnpm _test run",
+    "test:watch": "pnpm _test",
+    "test:ui": "pnpm _test --ui",
     "build-all": "tsc -b",
     "pack-all": "pnpm build-all && pnpm -r --filter !. pack"
   },
