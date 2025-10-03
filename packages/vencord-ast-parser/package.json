@@ -11,7 +11,9 @@
     "./*": "./dist/*.js"
   },
   "scripts": {
-    "test": "vitest"
+    "preversion": "mkdir .git || :",
+    "bump": "npm version",
+    "postversion": "rmdir .git"
   },
   "keywords": [],
   "license": "LGPL-3.0-or-later",

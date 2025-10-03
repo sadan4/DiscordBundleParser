@@ -40,9 +40,6 @@ importers:
       '@typescript-eslint/eslint-plugin':
         specifier: ^8.45.0
         version: 8.45.0(@typescript-eslint/parser@8.45.0(eslint@9.36.0)(typescript@5.9.3))(eslint@9.36.0)(typescript@5.9.3)
-      '@vencord-companion/tsconfig':
-        specifier: workspace:*
-        version: link:packages/tsconfig
       eslint:
         specifier: ^9.36.0
         version: 9.36.0
@@ -89,8 +86,6 @@ importers:
       vitest:
         specifier: 'catalog:'
         version: 3.2.4(@types/node@24.6.2)
-
-  packages/tsconfig: {}
 
   packages/vencord-ast-parser:
     dependencies:

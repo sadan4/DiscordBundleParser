@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "vitest"
+    "preversion": "mkdir .git || :",
+    "bump": "npm version",
+    "postversion": "rmdir .git"
   },
   "keywords": [],
   "author": {
