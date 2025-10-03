@@ -19,7 +19,8 @@
         // TODO: remove
         "noImplicitAny": false,
         "preserveSymlinks": false,
-        "types": []
+        "types": [],
+        "incremental": true,
     },
     "exclude": [
         "node_modules",
