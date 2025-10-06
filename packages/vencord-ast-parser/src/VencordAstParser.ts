@@ -1,10 +1,10 @@
 import { DeclarationDomain } from "ts-api-utils";
 import {
-    CallExpression,
+    type CallExpression,
     createPrinter,
     EmitHint,
-    Expression,
-    Identifier,
+    type Expression,
+    type Identifier,
     isArrayLiteralExpression,
     isArrowFunction,
     isCallExpression,
@@ -17,8 +17,8 @@ import {
     isStringLiteralLike,
     isTemplateExpression,
     isVariableDeclaration,
-    Node,
-    ObjectLiteralExpression,
+    type Node,
+    type ObjectLiteralExpression,
     ScriptTarget,
     transpileModule,
 } from "typescript";
@@ -29,15 +29,15 @@ import {
     findParent,
     getImportName,
     getImportSource,
-    Import,
+    type Import,
     isDefaultImport,
     isInImportStatment,
-    WithParent,
+    type WithParent,
 } from "@vencord-companion/ast-parser";
 import { Cache, CacheGetter } from "@vencord-companion/shared/decorators";
-import { Logger, NoopLogger } from "@vencord-companion/shared/Logger";
+import { type Logger, NoopLogger } from "@vencord-companion/shared/Logger";
 
-import { FindUse, FunctionNode, IFindType, IReplacement, PatchData, SourcePatch, StringNode, TestFind } from "./types";
+import type { FindUse, FunctionNode, IFindType, IReplacement, PatchData, SourcePatch, StringNode, TestFind } from "./types";
 import { tryParseRegularExpressionLiteral } from "./util";
 
 

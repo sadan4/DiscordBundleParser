@@ -1,5 +1,5 @@
 import {
-    CompilerOptions,
+    type CompilerOptions,
     createPrinter,
     EmitHint,
     findConfigFile,
@@ -7,7 +7,7 @@ import {
     isFunctionExpression,
     isRegularExpressionLiteral,
     isStringLiteral,
-    Node,
+    type Node,
     parseJsonConfigFileContent,
     readConfigFile,
     sys,
@@ -16,7 +16,7 @@ import {
 
 import { basename } from "node:path";
 
-import { FunctionNode, RegexNode, StringNode } from "./types";
+import type { FunctionNode, RegexNode, StringNode } from "./types";
 
 
 export function tryParseStringLiteral(node: Node): StringNode | null {

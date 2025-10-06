@@ -1,4 +1,4 @@
-import { ArrowFunction, FunctionExpression, FunctionLikeDeclaration, Identifier, ModuleExportName, Node } from "typescript";
+import type { ArrowFunction, FunctionExpression, FunctionLikeDeclaration, Identifier, ModuleExportName, Node } from "typescript";
 
 export type Functionish = FunctionLikeDeclaration | ArrowFunction | FunctionExpression;
 export type AnyFunction = FunctionExpression | ArrowFunction;

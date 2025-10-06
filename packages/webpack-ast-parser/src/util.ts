@@ -1,7 +1,7 @@
 import { Position } from "@vencord-companion/shared/Position";
 import { Range } from "@vencord-companion/shared/Range";
 
-import { ExportMap } from "./types";
+import type { ExportMap } from "./types";
 import { WebpackAstParser } from "./WebpackAstParser";
 
 export function allEntries<T extends object, K extends keyof T & (string | symbol)>(obj: T): (readonly [K, T[K]])[] {

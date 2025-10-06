@@ -1,11 +1,11 @@
 import { Format } from "@sadan4/devtools-pretty-printer";
-import { isAccessorDeclaration, VariableInfo } from "ts-api-utils";
+import { isAccessorDeclaration, type VariableInfo } from "ts-api-utils";
 import {
-    CallExpression,
-    ClassDeclaration,
+    type CallExpression,
+    type ClassDeclaration,
     createSourceFile,
-    Expression,
-    Identifier,
+    type Expression,
+    type Identifier,
     isArrowFunction,
     isBinaryExpression,
     isBlock,
@@ -26,14 +26,14 @@ import {
     isSpreadAssignment,
     isStringLiteralLike,
     isVariableDeclaration,
-    MemberName,
-    NewExpression,
-    Node,
-    NumericLiteral,
-    ObjectLiteralExpression,
+    type MemberName,
+    type NewExpression,
+    type Node,
+    type NumericLiteral,
+    type ObjectLiteralExpression,
     ScriptKind,
     ScriptTarget,
-    SourceFile,
+    type SourceFile,
 } from "typescript";
 
 import {
@@ -49,11 +49,11 @@ import {
     nonNull,
 } from "@vencord-companion/ast-parser";
 import { Cache, CacheGetter } from "@vencord-companion/shared/decorators";
-import { Logger, NoopLogger } from "@vencord-companion/shared/Logger";
+import { type Logger, NoopLogger } from "@vencord-companion/shared/Logger";
 import { Position } from "@vencord-companion/shared/Position";
 import { Range, zeroRange } from "@vencord-companion/shared/Range";
 
-import {
+import type {
     AnyExportKey,
     Definition,
     ExportMap,

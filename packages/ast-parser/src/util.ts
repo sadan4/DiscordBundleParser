@@ -1,9 +1,9 @@
 import {
-    Block,
-    DefaultKeyword,
+    type Block,
+    type DefaultKeyword,
     forEachChild,
-    Identifier,
-    ImportClause,
+    type Identifier,
+    type ImportClause,
     isBlock,
     isIdentifier,
     isImportClause,
@@ -13,17 +13,17 @@ import {
     isPropertyAccessExpression,
     isReturnStatement,
     isTokenKind,
-    NamespaceImport,
-    Node,
-    ObjectLiteralElementLike,
-    ObjectLiteralExpression,
-    PropertyAccessExpression,
-    SourceFile,
+    type NamespaceImport,
+    type Node,
+    type ObjectLiteralElementLike,
+    type ObjectLiteralExpression,
+    type PropertyAccessExpression,
+    type SourceFile,
     SyntaxKind,
-    SyntaxList,
+    type SyntaxList,
 } from "typescript";
 
-import { AnyFunction, AssertedType, CBAssertion, Functionish, Import, WithParent } from "./types";
+import type { AnyFunction, AssertedType, CBAssertion, Functionish, Import, WithParent } from "./types";
 
 export const enum CharCode {
     /**

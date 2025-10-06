@@ -1,4 +1,4 @@
-import { IPosition, Position } from "./Position";
+import { type IPosition, Position } from "./Position";
 
 export interface IRange {
     start: IPosition;
