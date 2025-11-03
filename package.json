@@ -10,6 +10,7 @@
     "test": "pnpm _test run",
     "test:watch": "pnpm _test",
     "test:ui": "pnpm _test --ui",
+    "lint": "eslint",
     "build-all": "tsc -b",
     "pack-all": "pnpm build-all && pnpm -r --filter !. pack",
     "pub-all": "pnpm -r publish --access public"
@@ -27,6 +28,7 @@
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-unicorn": "^61.0.2",
     "eslint-plugin-unused-imports": "^4.2.0",
+    "jiti": "^2.6.1",
     "typescript": "catalog:",
     "typescript-eslint": "^8.45.0",
     "vitest": "catalog:"
