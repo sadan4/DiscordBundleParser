@@ -12,12 +12,13 @@ import type {
     TryToParseAttrValue,
 } from "./utils";
 import type { MatchIt } from "../matcher";
+import type { TypeKey } from "../nodes";
 import type { Simplify } from "../utils";
 
 type PrepreprocessCompoundSelector<
     Selectors extends any[],
     SelectorAcc extends MetaAcc,
-    AST extends { type: any; },
+    AST extends { [TypeKey]: any; },
     Acc extends {
         selectors: any[];
         matches: any[];
@@ -81,7 +82,7 @@ type PrepreprocessCompoundSelector<
 type PreprocessCompoundSelector<
     Selectors extends any[],
     SelectorAcc extends MetaAcc,
-    AST extends { type: any; },
+    AST extends { [TypeKey]: any; },
     Acc extends any[] | null = null,
 > = Selectors extends [infer Selector, ...infer Rest]
     ? Selector extends { type: "wildcard"; } | { type: "class"; } | { type: "has"; }
@@ -186,7 +187,7 @@ type PreprocessCompoundSelector<
         ? Acc
         : [SelectorAcc];
 
-type SplitConjunction<
+export type SplitConjunction<
     T,
     Acc extends {
         and: MetaAcc[];
@@ -217,10 +218,10 @@ type SplitConjunction<
             : never
     : Simplify<Acc>;
 
-type PrecollapseCollectChildBoundaries<
+export type PrecollapseCollectChildBoundaries<
     Boundary,
     Ctx extends { field: any | null; },
-    AST extends { type: any; },
+    AST extends { [TypeKey]: any; },
 > = Ctx["field"] extends null
     ? ExtractChildDeps<Boundary, AST>
     : FilterNodes<
@@ -228,11 +229,11 @@ type PrecollapseCollectChildBoundaries<
         AST
     >;
 
-type MatchSplittedConjunction<
+export type MatchSplittedConjunction<
     Left,
     Splitted extends { and: any;
         not: any; },
-    AST extends { type: any; },
+    AST extends { [TypeKey]: any; },
 > = Extract<
     CollapsePositivesFromConjunction<Left, Splitted["and"], AST>,
     CollapseNegativesFromConjunction<Left, Splitted["not"], AST>
@@ -243,10 +244,10 @@ export type LeftIsAny = typeof _LeftIsAny;
 
 // TODO: extract inferredNodes too
 // TODO: change Acc default value accordingly
-type CollapseNegativesFromConjunction<
+export type CollapseNegativesFromConjunction<
     Left,
     Negatives,
-    AST extends { type: any; },
+    AST extends { [TypeKey]: any; },
     Acc = AST,
 > = Negatives extends [infer First, ...infer Rest]
     ? First extends MetaAcc
@@ -279,10 +280,10 @@ type CollapseNegativesFromConjunction<
         : never
     : Acc;
 
-type CollapsePositivesFromConjunction<
+export type CollapsePositivesFromConjunction<
     Left,
     Positives,
-    AST extends { type: any; },
+    AST extends { [TypeKey]: any; },
     Acc = Left extends LeftIsAny
         ? AST
         : PrecollapseCollectChildBoundaries<Left, { field: null; }, AST>,
@@ -342,7 +343,7 @@ type CollapsePositivesFromConjunction<
 export type CollapseChildRelations<
     Left,
     Right,
-    AST extends { type: any; },
+    AST extends { [TypeKey]: any; },
     Acc extends unknown[] = [],
 > = Right extends [infer First, ...infer Rest]
     ? First extends { args: any[]; }
@@ -361,7 +362,7 @@ export type CollapseChildRelations<
 type PreprocessSelectorsList<
     Selectors extends any[],
     SelectorAcc extends MetaAcc,
-    AST extends { type: any; },
+    AST extends { [TypeKey]: any; },
     Acc extends any[] = [],
 > = Selectors extends [infer Selector, ...infer Rest]
     ? PreprocessSelectorsList<
@@ -376,7 +377,7 @@ type PreprocessSelectorsList<
 export type PreprocessSelector<
     T,
     SelectorAcc extends MetaAcc,
-    AST extends { type: any; },
+    AST extends { [TypeKey]: any; },
 >
     = T extends
     | { type: "sibling"; }

@@ -1,3 +1,4 @@
+import type { IsAny, TypeKey } from "../nodes";
 import type { Simplify } from "../utils";
 
 // eslint-disable-next-line unused-imports/no-unused-vars
@@ -31,29 +32,31 @@ export type TryToNarrowByExtracting<T, U>
         ? Extract<T, { [K in keyof U]: any }>
         : Extract<T, U>;
 
-export type FilterNodes<T, AST extends { type: any; }>
-    = NonNullable<T> extends infer NonNullableT
-        ? NonNullableT extends {
-            type: AST["type"];
-        }
-            ? NonNullableT
-            : NonNullableT extends [...infer Elements]
-                ? NonNullable<Elements[number]> extends {
-                    type: AST["type"];
-                }
-                    ? NonNullable<Elements[number]>
+export type FilterNodes<T, AST extends { [TypeKey]: any; }>
+    = IsAny<T> extends false
+        ? NonNullable<T> extends infer NonNullableT
+            ? NonNullableT extends {
+                [TypeKey]: AST[TypeKey];
+            }
+                ? NonNullableT
+                : NonNullableT extends ArrayLike<infer Element>
+                    ? NonNullable<Element> extends {
+                        [TypeKey]: AST[TypeKey];
+                    }
+                        ? NonNullable<Element>
+                        : never
                     : never
-                : never
+            : never
         : never;
 
-export type ExtractChildDeps<T, AST extends { type: any; }> = NonNullable<
+export type ExtractChildDeps<T, AST extends { [TypeKey]: any; }> = AST & { [TypeKey]: NonNullable<
     {
         [K in keyof T]: K extends "parent" ? never : FilterNodes<T[K], AST>
     }[keyof T]
->;
+>[TypeKey]; };
 
 export type PickNode<T, AST> = [T] extends [any]
-    ? Extract<AST, { type: T; }>
+    ? Extract<AST, { [TypeKey]: T; }>
     : never;
 
 declare const _AttrValueIsUnsafeToIntersect: unique symbol;

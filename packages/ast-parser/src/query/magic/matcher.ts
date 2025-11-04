@@ -5,8 +5,9 @@ import type {
     LeftIsAny,
     PreprocessSelector,
 } from "./match/preprocess";
+import type { TypeKey } from "./nodes";
 
-export type MatchIt<T, AST extends { type: any; }> = CollapseChildRelations<
+export type MatchIt<T, AST extends { [TypeKey]: any; }> = CollapseChildRelations<
     LeftIsAny,
     Dnf<PreprocessSelector<T, WildcardMeta, AST>> extends infer Res
         ? Res extends { args: any[]; }

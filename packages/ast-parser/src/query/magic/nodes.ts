@@ -52,7 +52,6 @@ import {
     type ExportAssignment,
     type ExportDeclaration,
     type ExportSpecifier,
-    type Expression,
     type ExpressionStatement,
     type ExpressionWithTypeArguments,
     type ExternalModuleReference,
@@ -153,7 +152,6 @@ import {
     type NamespaceImport,
     type NewExpression,
     type Node,
-    type NodeArray,
     type NonNullExpression,
     type NoSubstitutionTemplateLiteral,
     type NotEmittedStatement,
@@ -226,25 +224,44 @@ import {
     type YieldExpression,
 } from "typescript";
 
+export declare const TypeKey: unique symbol;
+// eslint-disable-next-line no-redeclare
+export type TypeKey = typeof TypeKey;
+
+export type IsAny<T> = 0 extends (1 & T) ? true : false;
+
+export type NoNeverValues<T> = {
+    [K in keyof T as[T[K]] extends [never] ? never : K]: T[K];
+};
+
+export type Narrower<T, U> = T extends U ? T : U extends T ? U : never;
+
 type TypedNodes = {
     [K in keyof typeof SyntaxKind]: Node & { kind: typeof SyntaxKind[K]; };
 };
 
 type InverseSyntaxKind = {
-    [K in keyof typeof SyntaxKind as typeof SyntaxKind[K]]: K;
+    [K in keyof typeof SyntaxKind as typeof SyntaxKind[K]]: Exclude<K, InvalidTypes>;
 };
 
-type MapNode<T extends { kind: SyntaxKind; }> = {
+type MapNodeImpl<T extends { kind: SyntaxKind; }> = {
     [K in keyof T]:
     0 extends (1 & T[K]) // is any            
-        ? T[K] : T[K] extends Node
+        ? T[K]
+        : T[K] extends Node | null | undefined
             ? MapNode<T[K]>
-            : T[K] extends ArrayLike<infer Nodes extends Node>
+            : T[K] extends ArrayLike<infer Nodes extends Node> | null | undefined
                 ? MapNode<Nodes>[]
                 : T[K];
-} & { type: InverseSyntaxKind[T["kind"]]; };
+} & { [TypeKey]: InverseSyntaxKind[T["kind"]]; };
 
-export type UnmapNode<T> = T extends MapNode<infer N> ? N : never;
+type MapNode<
+    _T,
+    T extends { kind: SyntaxKind; } = _T & {} extends { kind: SyntaxKind; } ? _T & {} : never,
+    N = Exclude<_T, T>,
+> = MapNodeImpl<T> | N;
+
+export type UnmapNode<T> = T extends MapNode<infer _, infer N> ? N : never;
 
 interface UnmappedNodeTypes extends TypedNodes {
     Unknown: never;
@@ -612,7 +629,7 @@ interface UnmappedNodeTypes extends TypedNodes {
     // unused
     SyntheticReferenceExpression: never;
     Count: never;
-    // backwards compat
+    // markers
     FirstAssignment: never;
     LastAssignment: never;
     FirstCompoundAssignment: never;
@@ -627,6 +644,7 @@ interface UnmappedNodeTypes extends TypedNodes {
     LastTypeNode: never;
     FirstPunctuation: never;
     LastPunctuation: never;
+    FirstToken: never;
     LastToken: never;
     FirstTriviaToken: never;
     LastTriviaToken: never;
@@ -645,7 +663,14 @@ interface UnmappedNodeTypes extends TypedNodes {
     LastJSDocTagNode: never;
 }
 
+type _ = StringLiteral["text"];
+
+// mostly markers, some random other things
+type InvalidTypes = keyof {
+    [K in keyof UnmappedNodeTypes as[UnmappedNodeTypes[K]] extends [never] ? K : never]: never;
+};
+
 export type MappedNodeTypes = {
-    [K in keyof UnmappedNodeTypes]: MapNode<UnmappedNodeTypes[K]>;
+    [K in keyof UnmappedNodeTypes as [UnmappedNodeTypes[K]] extends [never] ? never : K]: MapNode<UnmappedNodeTypes[K]>;
 };
 export type NodeTypes = MappedNodeTypes[keyof MappedNodeTypes];
