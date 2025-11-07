@@ -663,8 +663,6 @@ interface UnmappedNodeTypes extends TypedNodes {
     LastJSDocTagNode: never;
 }
 
-type _ = StringLiteral["text"];
-
 // mostly markers, some random other things
 type InvalidTypes = keyof {
     [K in keyof UnmappedNodeTypes as[UnmappedNodeTypes[K]] extends [never] ? K : never]: never;
@@ -673,4 +671,5 @@ type InvalidTypes = keyof {
 export type MappedNodeTypes = {
     [K in keyof UnmappedNodeTypes as [UnmappedNodeTypes[K]] extends [never] ? never : K]: MapNode<UnmappedNodeTypes[K]>;
 };
+
 export type NodeTypes = MappedNodeTypes[keyof MappedNodeTypes];
