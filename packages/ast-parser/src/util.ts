@@ -25,7 +25,9 @@ import {
     isSetAccessorDeclaration,
     isStringLiteralLike,
     isTokenKind,
+    type LeftHandSideExpression,
     type LiteralToken,
+    type MemberName,
     type NamespaceImport,
     type Node,
     type ObjectLiteralElementLike,
@@ -423,4 +425,38 @@ export function isLiteralish(node: Node): node is LiteralToken {
       || isBigIntLiteral(node)
       || isJsxText(node)
       || isRegularExpressionLiteral(node);
+}
+
+// TODO: add tests for this
+/**
+ * @param expr the property access expression to flatten
+ *
+ * given a property access expression like `foo.bar.baz.qux`
+ * 
+ * @returns the identifiers [`foo`, `bar`, `baz`, `qux`]
+ * 
+ * given another property access expression like `foo.bar.baz[0].qux.abc`
+ * 
+ * @returns the elementAccessExpression, followed by the identifiers [`foo.bar.baz[0]`, `qux`, `abc`]
+ */
+export function flattenPropertyAccessExpression(expr: PropertyAccessExpression | undefined):
+  | readonly [LeftHandSideExpression, ...MemberName[]]
+  | undefined {
+    if (!expr)
+        return undefined;
+
+    const toRet = [] as any as [LeftHandSideExpression, ...MemberName[]];
+    let cur = expr;
+
+    do {
+        toRet.unshift(cur.name);
+        if (isIdentifier(cur.expression)) {
+            toRet.unshift(cur.expression);
+            return toRet;
+        }
+        if (!isPropertyAccessExpression(cur.expression)) {
+            toRet.unshift(cur.expression);
+            return;
+        }
+    } while ((cur = cur.expression));
 }

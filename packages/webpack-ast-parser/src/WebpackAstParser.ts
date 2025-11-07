@@ -44,6 +44,7 @@ import {
     findParentLimited,
     findReturnIdentifier,
     findReturnPropertyAccessExpression,
+    flattenPropertyAccessExpression,
     getLeadingIdentifier,
     isFunctionish,
     isLiteralish,
@@ -365,7 +366,7 @@ export class WebpackAstParser extends AstParser {
         if (!accessChain)
             return;
 
-        const importChain = this.flattenPropertyAccessExpression(accessChain);
+        const importChain = flattenPropertyAccessExpression(accessChain);
 
         if (!importChain)
             return;
@@ -461,7 +462,7 @@ export class WebpackAstParser extends AstParser {
         if (!accessChain)
             return;
 
-        const importChain = this.flattenPropertyAccessExpression(accessChain);
+        const importChain = flattenPropertyAccessExpression(accessChain);
 
         if (!importChain)
             return;
@@ -547,7 +548,7 @@ export class WebpackAstParser extends AstParser {
         if (!isPropertyAccessExpression(last))
             return;
 
-        const [imported, ...chain] = this.flattenPropertyAccessExpression(last) ?? [];
+        const [imported, ...chain] = flattenPropertyAccessExpression(last) ?? [];
 
         if (!imported || !isIdentifier(imported) || chain.length === 0)
             return;
@@ -706,7 +707,7 @@ export class WebpackAstParser extends AstParser {
                 continue;
             }
 
-            const [module, exports] = this.flattenPropertyAccessExpression(lhs) ?? [];
+            const [module, exports] = flattenPropertyAccessExpression(lhs) ?? [];
 
             if (!module || !isIdentifier(module) || !this.isUseOf(module, this.findWreq_e()) || exports?.text !== "exports") {
                 continue;
@@ -869,7 +870,7 @@ export class WebpackAstParser extends AstParser {
             .map((x) => x.location)
             .map((x) => {
                 let name: string | symbol | undefined
-                    = this.flattenPropertyAccessExpression(lastParent(x, isPropertyAccessExpression))?.[2]?.text;
+                    = flattenPropertyAccessExpression(lastParent(x, isPropertyAccessExpression))?.[2]?.text;
 
                 name ||= WebpackAstParser.SYM_CJS_DEFAULT;
 

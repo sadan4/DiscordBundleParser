@@ -10,13 +10,9 @@ import {
     isBinaryExpression,
     isFunctionLike,
     isIdentifier,
-    isPropertyAccessExpression,
     isVariableDeclaration,
     isVariableDeclarationList,
-    type LeftHandSideExpression,
-    type MemberName,
     type Node,
-    type PropertyAccessExpression,
     type ReadonlyTextRange,
     ScriptKind,
     ScriptTarget,
@@ -239,40 +235,6 @@ export class AstParser {
         const varDecl = findParent(decl, isVariableDeclarationList);
 
         return ((varDecl?.flags ?? 0) & SyntaxKind.ConstKeyword) !== 0 ? [decl] : false;
-    }
-
-    // TODO: add tests for this
-    /**
-     * @param expr the property access expression to flatten
-     *
-     * given a property access expression like `foo.bar.baz.qux`
-     * 
-     * @returns the identifiers [`foo`, `bar`, `baz`, `qux`]
-     * 
-     * given another property access expression like `foo.bar.baz[0].qux.abc`
-     * 
-     * @returns the elementAccessExpression, followed by the identifiers [`foo.bar.baz[0]`, `qux`, `abc`]
-     */
-    public flattenPropertyAccessExpression(expr: PropertyAccessExpression | undefined):
-      | readonly [LeftHandSideExpression, ...MemberName[]]
-      | undefined {
-        if (!expr)
-            return undefined;
-
-        const toRet = [] as any as [LeftHandSideExpression, ...MemberName[]];
-        let cur = expr;
-
-        do {
-            toRet.unshift(cur.name);
-            if (isIdentifier(cur.expression)) {
-                toRet.unshift(cur.expression);
-                return toRet;
-            }
-            if (!isPropertyAccessExpression(cur.expression)) {
-                toRet.unshift(cur.expression);
-                return;
-            }
-        } while ((cur = cur.expression));
     }
 
     /**
