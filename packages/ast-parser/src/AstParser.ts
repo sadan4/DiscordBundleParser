@@ -7,21 +7,14 @@ import {
     createSourceFile,
     type Expression,
     type Identifier,
-    isArrowFunction,
     isBigIntLiteral,
     isBinaryExpression,
-    isConstructorDeclaration,
-    isFunctionDeclaration,
-    isFunctionExpression,
     isFunctionLike,
-    isGetAccessorDeclaration,
     isIdentifier,
     isJsxText,
-    isMethodDeclaration,
     isNumericLiteral,
     isPropertyAccessExpression,
     isRegularExpressionLiteral,
-    isSetAccessorDeclaration,
     isStringLiteralLike,
     isVariableDeclaration,
     isVariableDeclarationList,
@@ -403,18 +396,6 @@ export class AstParser {
           || isBigIntLiteral(node)
           || isJsxText(node)
           || isRegularExpressionLiteral(node);
-    }
-
-    public isFunctionish(node: Node): node is Functionish {
-        return (
-            isFunctionDeclaration(node)
-            || isMethodDeclaration(node)
-            || isGetAccessorDeclaration(node)
-            || isSetAccessorDeclaration(node)
-            || isConstructorDeclaration(node)
-            || isFunctionExpression(node)
-            || isArrowFunction(node)
-        );
     }
 
     /**

@@ -4,14 +4,21 @@ import {
     forEachChild,
     type Identifier,
     type ImportClause,
+    isArrowFunction,
     isBlock,
+    isConstructorDeclaration,
+    isFunctionDeclaration,
+    isFunctionExpression,
+    isGetAccessorDeclaration,
     isIdentifier,
     isImportClause,
     isImportDeclaration,
     isImportSpecifier,
+    isMethodDeclaration,
     isNamespaceImport as _TS_isNamespaceImport,
     isPropertyAccessExpression,
     isReturnStatement,
+    isSetAccessorDeclaration,
     isTokenKind,
     type NamespaceImport,
     type Node,
@@ -390,4 +397,16 @@ function isNodeKind(kind: SyntaxKind) {
 
 export function nonNull<T>(x: T | null | undefined): x is T {
     return x != null;
+}
+
+export function isFunctionish(node: Node): node is Functionish {
+    return (
+        isFunctionDeclaration(node)
+        || isMethodDeclaration(node)
+        || isGetAccessorDeclaration(node)
+        || isSetAccessorDeclaration(node)
+        || isConstructorDeclaration(node)
+        || isFunctionExpression(node)
+        || isArrowFunction(node)
+    );
 }

@@ -45,6 +45,7 @@ import {
     findReturnIdentifier,
     findReturnPropertyAccessExpression,
     getLeadingIdentifier,
+    isFunctionish,
     isSyntaxList,
     lastParent,
     nonNull,
@@ -1191,7 +1192,7 @@ export class WebpackAstParser extends AstParser {
             return {
                 [node.name.getText()]: objRange,
             };
-        } else if (this.isFunctionish(node)) {
+        } else if (isFunctionish(node)) {
             wrapperFuncCheck: {
                 if (!node.body)
                     break wrapperFuncCheck;
@@ -1247,7 +1248,7 @@ export class WebpackAstParser extends AstParser {
         }
         if (Array.isArray(map)) {
             return map.map((node) => {
-                if (this.isFunctionish(node) && !node.name) {
+                if (isFunctionish(node) && !node.name) {
                     return this.makeRangeFromAnonFunction(node);
                 }
                 return this.makeRangeFromAstNode(node);
