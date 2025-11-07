@@ -2,7 +2,6 @@ import { Format } from "@sadan4/devtools-pretty-printer";
 import { collectVariableUsage, type VariableInfo } from "ts-api-utils";
 import {
     createSourceFile,
-    type Expression,
     type Identifier,
     isFunctionLike,
     type Node,
@@ -10,7 +9,6 @@ import {
     ScriptKind,
     ScriptTarget,
     type SourceFile,
-    SyntaxKind,
 } from "typescript";
 
 import { Cache, CacheGetter } from "@vencord-companion/shared/decorators";
@@ -20,7 +18,7 @@ import { Range } from "@vencord-companion/shared/Range";
 
 import type { StringifiedModule } from "./StringifiedModule";
 import type { Functionish } from "./types";
-import { CharCode, getTokenAtPosition, getVariableInitializer, isAssignmentExpression, isConstDeclared, isEOL } from "./util";
+import { CharCode, getTokenAtPosition, isEOL } from "./util";
 
 /**
  * @internal
@@ -141,48 +139,6 @@ export class AstParser {
         return {
             content: this.text,
         } satisfies StringifiedModule;
-    }
-
-    /**
-     * given a variable, if it has a single assignment in this file, return the expression assigned to it
-     * 
-     * returns undefined if there are multiple assignments, or if the variable is assigned more than once
-     */
-    public findSingleAssignment(info: VariableInfo): Expression | undefined {
-        const { declarations, uses } = info;
-
-        if (declarations.length !== 1) {
-            logger.warn("[AstParser] findSingleAssignment: multiple declarations");
-            return;
-        }
-
-        const [decl] = declarations;
-
-        if (isConstDeclared(info)) {
-            const init = getVariableInitializer(decl);
-
-            if (!init) {
-                logger.warn("[AstParser] findSingleAssignment: const variable without initializer");
-            }
-            return init;
-        }
-
-        let init: Expression | undefined;
-
-        for (const { location } of uses) {
-            if (isAssignmentExpression(location.parent)) {
-                // filter out cases like `<some other thing> = location`
-                if (location.parent.left !== location) {
-                    continue;
-                }
-                if (init || location.parent.operatorToken.kind !== SyntaxKind.EqualsToken) {
-                    return;
-                }
-                init = location.parent.right;
-            }
-        }
-
-        return init;
     }
 
     /**

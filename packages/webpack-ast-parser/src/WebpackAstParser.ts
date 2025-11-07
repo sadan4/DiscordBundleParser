@@ -44,6 +44,7 @@ import {
     findParentLimited,
     findReturnIdentifier,
     findReturnPropertyAccessExpression,
+    findSingleAssignment,
     flattenPropertyAccessExpression,
     getLeadingIdentifier,
     getVariableInitializer,
@@ -1646,7 +1647,7 @@ export class WebpackAstParser extends AstParser {
                 continue;
             }
 
-            const arg2Init = this.findSingleAssignment(arg2Info);
+            const arg2Init = findSingleAssignment(arg2Info);
 
             if (!arg2Init || !isStringLiteralLike(arg2Init) || arg2Init.text !== "displayName") {
                 continue;
@@ -1676,7 +1677,7 @@ export class WebpackAstParser extends AstParser {
                 continue;
             }
 
-            const maybeStoreName = this.findSingleAssignment(valueInfo);
+            const maybeStoreName = findSingleAssignment(valueInfo);
 
             if (!maybeStoreName || !isStringLiteralLike(maybeStoreName)) {
                 continue;
