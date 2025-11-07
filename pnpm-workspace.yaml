@@ -8,5 +8,8 @@ catalog:
   typescript: ^5.0.0
   vitest: ^3.2.4
 
+onlyBuiltDependencies:
+  - esbuild
+
 patchedDependencies:
   ts-api-utils: patches/ts-api-utils.patch

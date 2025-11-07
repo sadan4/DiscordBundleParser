@@ -1,4 +1,7 @@
+import type { VariableInfo } from "ts-api-utils";
 import {
+    type AssignmentExpression,
+    type AssignmentOperatorToken,
     type Block,
     type DefaultKeyword,
     forEachChild,
@@ -6,6 +9,7 @@ import {
     type ImportClause,
     isArrowFunction,
     isBigIntLiteral,
+    isBinaryExpression,
     isBlock,
     isConstructorDeclaration,
     isFunctionDeclaration,
@@ -25,6 +29,7 @@ import {
     isSetAccessorDeclaration,
     isStringLiteralLike,
     isTokenKind,
+    isVariableDeclarationList,
     type LeftHandSideExpression,
     type LiteralToken,
     type MemberName,
@@ -38,6 +43,7 @@ import {
     type SyntaxList,
 } from "typescript";
 
+import { logger } from "./AstParser";
 import type { AnyFunction, AssertedType, CBAssertion, Functionish, Import, WithParent } from "./types";
 
 export const enum CharCode {
@@ -459,4 +465,51 @@ export function flattenPropertyAccessExpression(expr: PropertyAccessExpression |
             return;
         }
     } while ((cur = cur.expression));
+}
+
+/**
+ * TODO: document this
+ */
+export function isConstDeclared(info: VariableInfo): [Identifier] | false {
+    const len = info.declarations.length;
+
+    if (len !== 1) {
+        if (len > 1) {
+            logger.warn("[AstParser] isConstDeclared: ?????");
+        }
+        return false;
+    }
+
+    const [decl] = info.declarations;
+    const varDecl = findParent(decl, isVariableDeclarationList);
+
+    return ((varDecl?.flags ?? 0) & SyntaxKind.ConstKeyword) !== 0 ? [decl] : false;
+}
+
+
+const assignmentTokens: Partial<Record<SyntaxKind, true>> = {
+    [SyntaxKind.EqualsToken]: true,
+    [SyntaxKind.PlusEqualsToken]: true,
+    [SyntaxKind.MinusEqualsToken]: true,
+    [SyntaxKind.AsteriskAsteriskEqualsToken]: true,
+    [SyntaxKind.AsteriskEqualsToken]: true,
+    [SyntaxKind.SlashEqualsToken]: true,
+    [SyntaxKind.PercentEqualsToken]: true,
+    [SyntaxKind.AmpersandEqualsToken]: true,
+    [SyntaxKind.BarEqualsToken]: true,
+    [SyntaxKind.CaretEqualsToken]: true,
+    [SyntaxKind.LessThanLessThanEqualsToken]: true,
+    [SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken]: true,
+    [SyntaxKind.GreaterThanGreaterThanEqualsToken]: true,
+    [SyntaxKind.BarBarEqualsToken]: true,
+    [SyntaxKind.AmpersandAmpersandEqualsToken]: true,
+    [SyntaxKind.QuestionQuestionEqualsToken]: true,
+};
+
+export function isAssignmentExpression(node: Node | undefined):
+    node is AssignmentExpression<AssignmentOperatorToken> {
+    if (!node || !isBinaryExpression(node))
+        return false;
+
+    return assignmentTokens[node.operatorToken.kind] === true;
 }

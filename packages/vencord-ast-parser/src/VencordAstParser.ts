@@ -31,6 +31,7 @@ import {
     getImportName,
     getImportSource,
     type Import,
+    isConstDeclared,
     isDefaultImport,
     isInImportStatment,
     type WithParent,
@@ -187,7 +188,7 @@ export class VencordAstParser extends AstParser {
                     break tryParse;
                 }
 
-                const isConst = this.isConstDeclared(usageInfo);
+                const isConst = isConstDeclared(usageInfo);
 
                 if (!isConst) {
                     break tryParse;

@@ -46,6 +46,7 @@ import {
     findReturnPropertyAccessExpression,
     flattenPropertyAccessExpression,
     getLeadingIdentifier,
+    isAssignmentExpression,
     isFunctionish,
     isLiteralish,
     isSyntaxList,
@@ -694,7 +695,7 @@ export class WebpackAstParser extends AstParser {
         // e.exports = n(moduleId);
 
         for (const { location: use } of this.uses!.uses) {
-            const assignment = findParent(use, this.isAssignmentExpression);
+            const assignment = findParent(use, isAssignmentExpression);
 
             if (!assignment) {
                 continue;
@@ -1455,7 +1456,7 @@ export class WebpackAstParser extends AstParser {
                     throw new Error("[WebpackAstParser] Variable declaration has no initializer, this should be filtered out by the previous isVariableAssignmentLike check");
                 }
                 return use.parent.initializer;
-            } else if (this.isAssignmentExpression(use.parent)) {
+            } else if (isAssignmentExpression(use.parent)) {
                 return use.parent.right;
             }
             throw new Error("Unexpected type for use, this should not happen");

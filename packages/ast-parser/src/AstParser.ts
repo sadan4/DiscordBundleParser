@@ -11,7 +11,6 @@ import {
     isFunctionLike,
     isIdentifier,
     isVariableDeclaration,
-    isVariableDeclarationList,
     type Node,
     type ReadonlyTextRange,
     ScriptKind,
@@ -28,9 +27,12 @@ import { Range } from "@vencord-companion/shared/Range";
 
 import type { StringifiedModule } from "./StringifiedModule";
 import type { Functionish } from "./types";
-import { CharCode, findParent, getTokenAtPosition, isEOL } from "./util";
+import { CharCode, getTokenAtPosition, isAssignmentExpression, isConstDeclared, isEOL } from "./util";
 
-let logger: Logger = NoopLogger;
+/**
+ * @internal
+ */
+export let logger: Logger = NoopLogger;
 
 export function setLogger(newLogger: Logger) {
     logger = newLogger;
@@ -186,55 +188,9 @@ export class AstParser {
         if (isVariableDeclaration(node)) {
             return isIdentifier(node.name) && !!node.initializer;
         } else if (isBinaryExpression(node)) {
-            return this.isAssignmentExpression(node);
+            return isAssignmentExpression(node);
         }
         return false;
-    }
-
-    private static AssignmentTokens: Partial<Record<SyntaxKind, true>> = {
-        [SyntaxKind.EqualsToken]: true,
-        [SyntaxKind.PlusEqualsToken]: true,
-        [SyntaxKind.MinusEqualsToken]: true,
-        [SyntaxKind.AsteriskAsteriskEqualsToken]: true,
-        [SyntaxKind.AsteriskEqualsToken]: true,
-        [SyntaxKind.SlashEqualsToken]: true,
-        [SyntaxKind.PercentEqualsToken]: true,
-        [SyntaxKind.AmpersandEqualsToken]: true,
-        [SyntaxKind.BarEqualsToken]: true,
-        [SyntaxKind.CaretEqualsToken]: true,
-        [SyntaxKind.LessThanLessThanEqualsToken]: true,
-        [SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken]: true,
-        [SyntaxKind.GreaterThanGreaterThanEqualsToken]: true,
-        [SyntaxKind.BarBarEqualsToken]: true,
-        [SyntaxKind.AmpersandAmpersandEqualsToken]: true,
-        [SyntaxKind.QuestionQuestionEqualsToken]: true,
-    };
-
-    public isAssignmentExpression(node: Node | undefined):
-     node is AssignmentExpression<AssignmentOperatorToken> {
-        if (!node || !isBinaryExpression(node))
-            return false;
-
-        return AstParser.AssignmentTokens[node.operatorToken.kind] === true;
-    }
-
-    /**
-     * TODO: document this
-     */
-    public isConstDeclared(info: VariableInfo): [Identifier] | false {
-        const len = info.declarations.length;
-
-        if (len !== 1) {
-            if (len > 1) {
-                logger.warn("[AstParser] isConstDeclared: ?????");
-            }
-            return false;
-        }
-
-        const [decl] = info.declarations;
-        const varDecl = findParent(decl, isVariableDeclarationList);
-
-        return ((varDecl?.flags ?? 0) & SyntaxKind.ConstKeyword) !== 0 ? [decl] : false;
     }
 
     /**
@@ -252,7 +208,7 @@ export class AstParser {
 
         const [decl] = declarations;
 
-        if (this.isConstDeclared(info)) {
+        if (isConstDeclared(info)) {
             const init = this.getVariableInitializer(decl);
 
             if (!init) {
@@ -264,7 +220,7 @@ export class AstParser {
         let init: Expression | undefined;
 
         for (const { location } of uses) {
-            if (this.isAssignmentExpression(location.parent)) {
+            if (isAssignmentExpression(location.parent)) {
                 // filter out cases like `<some other thing> = location`
                 if (location.parent.left !== location) {
                     continue;

@@ -20,7 +20,8 @@
         "preserveSymlinks": false,
         "types": [],
         "incremental": true,
-        "verbatimModuleSyntax": true
+        "verbatimModuleSyntax": true,
+        "stripInternal": true,
     },
     "exclude": [
         "node_modules",
