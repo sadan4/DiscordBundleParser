@@ -2,7 +2,6 @@ import { Format } from "@sadan4/devtools-pretty-printer";
 import { type VariableInfo } from "ts-api-utils";
 import {
     type CallExpression,
-    type ClassDeclaration,
     createSourceFile,
     type Expression,
     type Identifier,
@@ -23,7 +22,6 @@ import {
     isPropertyAccessExpression,
     isPropertyAssignment,
     isPropertyDeclaration,
-    isSemicolonClassElement,
     isSpreadAssignment,
     isStringLiteralLike,
     isVariableDeclaration,
@@ -75,9 +73,9 @@ import type {
     Reference,
     Store,
 } from "./types";
-import { allEntries, assertNotHover, containsPosition, formatModule, fromEntries } from "./util";
+import { allEntries, assertNotHover, containsPosition, formatModule, fromEntries, getNestedExportFromMap, parseClassDeclaration } from "./util";
 
-let logger: Logger = NoopLogger;
+export let logger: Logger = NoopLogger;
 
 export function setLogger(l: Logger): void {
     logger = l;
@@ -542,7 +540,7 @@ export class WebpackAstParser extends AstParser {
     doesReExportFromExport(exportName: AnyExportKey[]):
         [importSourceId: string, exportName: MemberName[]] | undefined {
         const map = this.getExportMapRaw();
-        const exp = this.getNestedExportFromMap(exportName, map);
+        const exp = getNestedExportFromMap(exportName, map);
         const last = exp?.at(-1);
 
         if (!last)
@@ -1686,54 +1684,6 @@ export class WebpackAstParser extends AstParser {
         }
     }
 
-    /**
-     * 
-     * @returns ```js
-     * {
-     *     "<PASSED_IN_CLASS_NAME>": {
-     *          [WebpackAstParser.SYM_CJS_DEFAULT]: ["<CONSTRUCTOR>"],
-     *          ["methodName"]: ["METHOD"]
-     *     }
-     * }
-     * ```
-     */
-    parseClassDeclaration(clazz: ClassDeclaration, extraExportRanges: Node[] = []): RawExportMap {
-        const ret: RawExportMap = {
-            [WebpackAstParser.SYM_CJS_DEFAULT]: [...extraExportRanges, clazz.name ?? clazz.getChildAt(0)],
-        };
-
-        for (const member of clazz.members) {
-            if (isMethodDeclaration(member)) {
-                if (!member.body)
-                    continue;
-                ret[member.name.getText()] = [member.name];
-            } else if (isConstructorDeclaration(member)) {
-                // the ConstructoKeyword
-                const arr = ret[WebpackAstParser.SYM_CJS_DEFAULT];
-
-                if (!Array.isArray(arr)) {
-                    logger.error("CJS default export is not an array, this should be never happen");
-                    continue;
-                }
-                arr.push(member.getChildAt(0));
-            } else if (isPropertyDeclaration(member)) {
-                ret[member.name.getText()] = [member.name];
-            } else if (isAccessor(member)) {
-                if (!member.body)
-                    continue;
-                ret[member.name.getText()] = [member.name];
-            } else if (isSemicolonClassElement(member)) {
-                // ignore this
-            } else {
-                logger.warn("Unhandled class member type. This should be handled");
-            }
-        }
-
-        // name ?? ClassKeyword
-        ret[WebpackAstParser.SYM_CJS_DEFAULT] ??= [clazz.name ?? clazz.getChildAt(0)];
-
-        return ret;
-    }
 
     tryParseClassDeclaration(node: Node, extraExportRanges: Node[]): RawExportMap | undefined {
         if (!isIdentifier(node)) {
@@ -1761,22 +1711,7 @@ export class WebpackAstParser extends AstParser {
         if (!isClassDeclaration(decl.parent)) {
             return;
         }
-        return this.parseClassDeclaration(decl.parent, extraExportRanges);
-    }
-
-    getNestedExportFromMap<T>(keys: readonly AnyExportKey[], map: ExportMap<T>): T[] | undefined {
-        let i = 0;
-        let cur: ExportMap<T>[keyof ExportMap<T>] = map;
-
-        while ((cur = cur[keys[i++]])) {
-            if (Array.isArray(cur)) {
-                return cur;
-            } else if (Array.isArray(cur[WebpackAstParser.SYM_CJS_DEFAULT])) {
-                // @ts-expect-error i just fucking checked this typescript
-                return cur[WebpackAstParser.SYM_CJS_DEFAULT];
-            }
-        }
-        return undefined;
+        return parseClassDeclaration(decl.parent, extraExportRanges);
     }
 
     findExportLocation(exportNames: readonly AnyExportKey[]): Range {

@@ -1,27 +1,20 @@
 import { DeclarationDomain } from "ts-api-utils";
 import {
     type CallExpression,
-    createPrinter,
-    EmitHint,
     type Expression,
     type Identifier,
     isArrayLiteralExpression,
-    isArrowFunction,
     isCallExpression,
-    isFunctionExpression,
     isIdentifier,
     isNamespaceImport,
     isObjectLiteralExpression,
     isPropertyAssignment,
-    isRegularExpressionLiteral,
     isStringLiteral,
     isStringLiteralLike,
     isTemplateExpression,
     isVariableDeclaration,
     type Node,
     type ObjectLiteralExpression,
-    ScriptTarget,
-    transpileModule,
 } from "typescript";
 
 import {
@@ -39,8 +32,8 @@ import {
 import { Cache, CacheGetter } from "@vencord-companion/shared/decorators";
 import { type Logger, NoopLogger } from "@vencord-companion/shared/Logger";
 
-import type { FindUse, FunctionNode, IFindType, IReplacement, PatchData, SourcePatch, StringNode, TestFind } from "./types";
-import { tryParseRegularExpressionLiteral } from "./util";
+import type { FindUse, IReplacement, PatchData, SourcePatch, StringNode, TestFind } from "./types";
+import { parseFind, tryParseFunction, tryParseRegularExpressionLiteral } from "./util";
 
 
 let logger: Logger = NoopLogger;
@@ -145,20 +138,6 @@ export class VencordAstParser extends AstParser {
             .filter((x) => x !== null);
     }
 
-    parseFind(patch: ObjectLiteralExpression): IFindType | null {
-        const find = findObjectLiteralByKey(patch, "find");
-
-        if (!find || !isPropertyAssignment(find))
-            return null;
-        if (!(isStringLiteral(find.initializer) || isRegularExpressionLiteral(find.initializer)))
-            return null;
-
-        return {
-            findType: isStringLiteral(find.initializer) ? "string" : "regex",
-            find: find.initializer.text,
-        };
-    }
-
     /**
      * Try to parse a string literal
      *
@@ -233,31 +212,9 @@ export class VencordAstParser extends AstParser {
         };
     }
 
-    tryParseFunction(node: Node): FunctionNode | null {
-        if (!isArrowFunction(node) && !isFunctionExpression(node))
-            return null;
-
-        const code = createPrinter()
-            .printNode(EmitHint.Expression, node, node.getSourceFile());
-
-        const res = transpileModule(code, {
-            compilerOptions: {
-                target: ScriptTarget.ESNext,
-                strict: true,
-            },
-        });
-
-        if (res.diagnostics && res.diagnostics.length > 0)
-            return null;
-
-        return {
-            type: "function",
-            value: res.outputText,
-        };
-    }
 
     parseReplace(node: Expression) {
-        return this.tryParseStringLiteralToStringNode(node) ?? this.tryParseFunction(node);
+        return this.tryParseStringLiteralToStringNode(node) ?? tryParseFunction(node);
     }
 
     parseMatch(node: Expression) {
@@ -304,7 +261,7 @@ export class VencordAstParser extends AstParser {
     }
 
     parsePatch(patch: ObjectLiteralExpression): PatchData | null {
-        const find = this.parseFind(patch);
+        const find = parseFind(patch);
         const replacement = this.parseReplacement(patch);
 
         if (!replacement || !find)
@@ -339,7 +296,7 @@ export class VencordAstParser extends AstParser {
                 const args = call.arguments.map((x) => {
                     return this.tryParseStringLiteralToStringNode(x)
                       ?? tryParseRegularExpressionLiteral(x)
-                      ?? this.tryParseFunction(x);
+                      ?? tryParseFunction(x);
                 });
 
                 const range = this.makeRangeFromAstNode(call);

@@ -1,22 +1,20 @@
 import {
-    type CompilerOptions,
     createPrinter,
     EmitHint,
-    findConfigFile,
     isArrowFunction,
     isFunctionExpression,
+    isPropertyAssignment,
     isRegularExpressionLiteral,
     isStringLiteral,
     type Node,
-    parseJsonConfigFileContent,
-    readConfigFile,
-    sys,
+    type ObjectLiteralExpression,
+    ScriptTarget,
     transpileModule,
 } from "typescript";
 
-import { basename } from "node:path";
+import { findObjectLiteralByKey } from "@vencord-companion/ast-parser/util";
 
-import type { FunctionNode, RegexNode, StringNode } from "./types";
+import type { FunctionNode, IFindType, RegexNode, StringNode } from "./types";
 
 
 export function tryParseStringLiteral(node: Node): StringNode | null {
@@ -43,23 +41,37 @@ export function tryParseRegularExpressionLiteral(node: Node): RegexNode | null {
         },
     };
 }
-export function tryParseFunction(path: string, node: Node): FunctionNode | null {
+
+export function parseFind(patch: ObjectLiteralExpression): IFindType | null {
+    const find = findObjectLiteralByKey(patch, "find");
+
+    if (!find || !isPropertyAssignment(find))
+        return null;
+    if (!(isStringLiteral(find.initializer) || isRegularExpressionLiteral(find.initializer)))
+        return null;
+
+    return {
+        findType: isStringLiteral(find.initializer) ? "string" : "regex",
+        find: find.initializer.text,
+    };
+}
+
+/**
+ * @internal
+ */
+export function tryParseFunction(node: Node): FunctionNode | null {
     if (!isArrowFunction(node) && !isFunctionExpression(node))
         return null;
 
     const code = createPrinter()
         .printNode(EmitHint.Expression, node, node.getSourceFile());
 
-    let compilerOptions: CompilerOptions = {};
-    const tsConfigPath = findConfigFile(path, sys.fileExists);
-
-    if (tsConfigPath) {
-        const configFile = readConfigFile(tsConfigPath, sys.readFile);
-
-        compilerOptions = parseJsonConfigFileContent(configFile.config, sys, basename(tsConfigPath)).options;
-    }
-
-    const res = transpileModule(code, { compilerOptions });
+    const res = transpileModule(code, {
+        compilerOptions: {
+            target: ScriptTarget.ESNext,
+            strict: true,
+        },
+    });
 
     if (res.diagnostics && res.diagnostics.length > 0)
         return null;

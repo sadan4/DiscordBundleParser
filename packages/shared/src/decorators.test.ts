@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import { describe, expect, it } from "vitest";
 
 import { Cache, CacheGetter } from "./decorators";
