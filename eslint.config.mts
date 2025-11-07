@@ -34,6 +34,7 @@ const ESLintRules: Partial<IESLintRules> = {
             allowImplicit: true,
         },
     ],
+    "class-methods-use-this": ["warn"],
     // done by tsserver
     "constructor-super": "off",
     "for-direction": "error",
