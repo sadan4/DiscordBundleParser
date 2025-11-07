@@ -46,6 +46,7 @@ import {
     findReturnPropertyAccessExpression,
     getLeadingIdentifier,
     isFunctionish,
+    isLiteralish,
     isSyntaxList,
     lastParent,
     nonNull,
@@ -963,7 +964,7 @@ export class WebpackAstParser extends AstParser {
 
         const [id] = initExpr.arguments;
 
-        if (!this.isLiteralish(id)) {
+        if (!isLiteralish(id)) {
             logger.warn("id is not literalish");
             return;
         }
@@ -1182,7 +1183,7 @@ export class WebpackAstParser extends AstParser {
                 props.push([WebpackAstParser.SYM_CJS_DEFAULT, [node.getChildAt(0)]]);
 
             return fromEntries<RawExportMap>(props);
-        } else if (this.isLiteralish(node)) {
+        } else if (isLiteralish(node)) {
             return [node];
         } else if (isPropertyAssignment(node)) {
             const objRange = this.rawMakeExportMapRecursive(node.initializer);

@@ -5,6 +5,7 @@ import {
     type Identifier,
     type ImportClause,
     isArrowFunction,
+    isBigIntLiteral,
     isBlock,
     isConstructorDeclaration,
     isFunctionDeclaration,
@@ -14,12 +15,17 @@ import {
     isImportClause,
     isImportDeclaration,
     isImportSpecifier,
+    isJsxText,
     isMethodDeclaration,
     isNamespaceImport as _TS_isNamespaceImport,
+    isNumericLiteral,
     isPropertyAccessExpression,
+    isRegularExpressionLiteral,
     isReturnStatement,
     isSetAccessorDeclaration,
+    isStringLiteralLike,
     isTokenKind,
+    type LiteralToken,
     type NamespaceImport,
     type Node,
     type ObjectLiteralElementLike,
@@ -409,4 +415,12 @@ export function isFunctionish(node: Node): node is Functionish {
         || isFunctionExpression(node)
         || isArrowFunction(node)
     );
+}
+
+export function isLiteralish(node: Node): node is LiteralToken {
+    return isStringLiteralLike(node)
+      || isNumericLiteral(node)
+      || isBigIntLiteral(node)
+      || isJsxText(node)
+      || isRegularExpressionLiteral(node);
 }

@@ -7,19 +7,13 @@ import {
     createSourceFile,
     type Expression,
     type Identifier,
-    isBigIntLiteral,
     isBinaryExpression,
     isFunctionLike,
     isIdentifier,
-    isJsxText,
-    isNumericLiteral,
     isPropertyAccessExpression,
-    isRegularExpressionLiteral,
-    isStringLiteralLike,
     isVariableDeclaration,
     isVariableDeclarationList,
     type LeftHandSideExpression,
-    type LiteralToken,
     type MemberName,
     type Node,
     type PropertyAccessExpression,
@@ -388,14 +382,6 @@ export class AstParser {
             return undefined;
         }
         return this.makeRangeFromAstNode(declarations[0]);
-    }
-
-    public isLiteralish(node: Node): node is LiteralToken {
-        return isStringLiteralLike(node)
-          || isNumericLiteral(node)
-          || isBigIntLiteral(node)
-          || isJsxText(node)
-          || isRegularExpressionLiteral(node);
     }
 
     /**
