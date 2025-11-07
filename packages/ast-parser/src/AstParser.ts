@@ -6,7 +6,6 @@ import {
     type Expression,
     type Identifier,
     isFunctionLike,
-    isVariableDeclaration,
     type Node,
     type ReadonlyTextRange,
     ScriptKind,
@@ -22,7 +21,7 @@ import { Range } from "@vencord-companion/shared/Range";
 
 import type { StringifiedModule } from "./StringifiedModule";
 import type { Functionish } from "./types";
-import { CharCode, getTokenAtPosition, isAssignmentExpression, isConstDeclared, isEOL } from "./util";
+import { CharCode, getTokenAtPosition, getVariableInitializer, isAssignmentExpression, isConstDeclared, isEOL } from "./util";
 
 /**
  * @internal
@@ -150,24 +149,6 @@ export class AstParser {
     }
 
     /**
-     * given the `x` of
-     * ```js
-     * const x = {
-     * foo: bar
-     * }
-     * ```
-     * NOTE: this must be the exact x, not a use of it
-     * @returns the expression {foo: bar}
-     */
-    public getVariableInitializer(ident: Identifier): Expression | undefined {
-        const dec = ident.parent;
-
-        if (!isVariableDeclaration(dec))
-            return;
-        return dec.initializer;
-    }
-
-    /**
      * given a variable, if it has a single assignment in this file, return the expression assigned to it
      * 
      * returns undefined if there are multiple assignments, or if the variable is assigned more than once
@@ -183,7 +164,7 @@ export class AstParser {
         const [decl] = declarations;
 
         if (isConstDeclared(info)) {
-            const init = this.getVariableInitializer(decl);
+            const init = getVariableInitializer(decl);
 
             if (!init) {
                 logger.warn("[AstParser] findSingleAssignment: const variable without initializer");

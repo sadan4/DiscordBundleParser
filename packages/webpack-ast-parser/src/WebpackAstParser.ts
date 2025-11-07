@@ -46,6 +46,7 @@ import {
     findReturnPropertyAccessExpression,
     flattenPropertyAccessExpression,
     getLeadingIdentifier,
+    getVariableInitializer,
     isAssignmentExpression,
     isFunctionish,
     isLiteralish,
@@ -1232,7 +1233,7 @@ export class WebpackAstParser extends AstParser {
                 return [];
             }
 
-            const last = this.getVariableInitializer(trail.at(-1)!);
+            const last = getVariableInitializer(trail.at(-1)!);
 
             if (!last) {
                 logger.trace("[WebpackAstParser] Could not find initializer of identifier");

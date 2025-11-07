@@ -4,6 +4,7 @@ import {
     type AssignmentOperatorToken,
     type Block,
     type DefaultKeyword,
+    type Expression,
     forEachChild,
     type Identifier,
     type ImportClause,
@@ -535,4 +536,22 @@ export function isVariableAssignmentLike(node: Node | undefined):
         return isAssignmentExpression(node);
     }
     return false;
+}
+
+/**
+ * given the `x` of
+ * ```js
+ * const x = {
+ * foo: bar
+ * }
+ * ```
+ * NOTE: this must be the exact x, not a use of it
+ * @returns the expression {foo: bar}
+ */
+export function getVariableInitializer(ident: Identifier): Expression | undefined {
+    const dec = ident.parent;
+
+    if (!isVariableDeclaration(dec))
+        return;
+    return dec.initializer;
 }
