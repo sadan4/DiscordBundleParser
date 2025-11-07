@@ -29,6 +29,7 @@ import {
     isSetAccessorDeclaration,
     isStringLiteralLike,
     isTokenKind,
+    isVariableDeclaration,
     isVariableDeclarationList,
     type LeftHandSideExpression,
     type LiteralToken,
@@ -41,6 +42,7 @@ import {
     type SourceFile,
     SyntaxKind,
     type SyntaxList,
+    type VariableDeclaration,
 } from "typescript";
 
 import { logger } from "./AstParser";
@@ -512,4 +514,25 @@ export function isAssignmentExpression(node: Node | undefined):
         return false;
 
     return assignmentTokens[node.operatorToken.kind] === true;
+}
+
+export function isVariableAssignmentLike(node: Node | undefined):
+    node is
+    | (
+      & Omit<VariableDeclaration, "name" | "initializer">
+      & {
+          name: Identifier;
+          initializer: Exclude<VariableDeclaration["initializer"], undefined>;
+      }
+    )
+    | (Omit<AssignmentExpression<AssignmentOperatorToken>, "left"> & { left: Identifier; }) {
+    if (!node)
+        return false;
+
+    if (isVariableDeclaration(node)) {
+        return isIdentifier(node.name) && !!node.initializer;
+    } else if (isBinaryExpression(node)) {
+        return isAssignmentExpression(node);
+    }
+    return false;
 }

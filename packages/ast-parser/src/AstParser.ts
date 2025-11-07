@@ -1,15 +1,11 @@
 import { Format } from "@sadan4/devtools-pretty-printer";
 import { collectVariableUsage, type VariableInfo } from "ts-api-utils";
 import {
-    type AssignmentExpression,
-    type AssignmentOperatorToken,
     type CallExpression,
     createSourceFile,
     type Expression,
     type Identifier,
-    isBinaryExpression,
     isFunctionLike,
-    isIdentifier,
     isVariableDeclaration,
     type Node,
     type ReadonlyTextRange,
@@ -17,7 +13,6 @@ import {
     ScriptTarget,
     type SourceFile,
     SyntaxKind,
-    type VariableDeclaration,
 } from "typescript";
 
 import { Cache, CacheGetter } from "@vencord-companion/shared/decorators";
@@ -170,27 +165,6 @@ export class AstParser {
         if (!isVariableDeclaration(dec))
             return;
         return dec.initializer;
-    }
-
-    public isVariableAssignmentLike(node: Node | undefined):
-    node is
-    | (
-      & Omit<VariableDeclaration, "name" | "initializer">
-      & {
-          name: Identifier;
-          initializer: Exclude<VariableDeclaration["initializer"], undefined>;
-      }
-    )
-    | (Omit<AssignmentExpression<AssignmentOperatorToken>, "left"> & { left: Identifier; }) {
-        if (!node)
-            return false;
-
-        if (isVariableDeclaration(node)) {
-            return isIdentifier(node.name) && !!node.initializer;
-        } else if (isBinaryExpression(node)) {
-            return isAssignmentExpression(node);
-        }
-        return false;
     }
 
     /**

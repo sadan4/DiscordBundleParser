@@ -50,6 +50,7 @@ import {
     isFunctionish,
     isLiteralish,
     isSyntaxList,
+    isVariableAssignmentLike,
     lastParent,
     nonNull,
 } from "@vencord-companion/ast-parser";
@@ -1438,7 +1439,7 @@ export class WebpackAstParser extends AstParser {
         // find where it's set to the new store
         // there should never be more than one assignment
         const uses = allUses.filter((ident) => {
-            return this.isVariableAssignmentLike(ident.parent);
+            return isVariableAssignmentLike(ident.parent);
         });
 
         if (uses.length === 0) {
