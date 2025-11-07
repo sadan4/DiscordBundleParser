@@ -1,5 +1,5 @@
-import type { IsAny, TypeKey } from "../nodes";
-import type { Simplify } from "../utils";
+import type { TypeKey } from "../nodes";
+import type { IsAny, Simplify } from "../utils";
 
 // eslint-disable-next-line unused-imports/no-unused-vars
 declare const NeverErrorSymbol: unique symbol;

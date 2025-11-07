@@ -228,14 +228,6 @@ export declare const TypeKey: unique symbol;
 // eslint-disable-next-line no-redeclare
 export type TypeKey = typeof TypeKey;
 
-export type IsAny<T> = 0 extends (1 & T) ? true : false;
-
-export type NoNeverValues<T> = {
-    [K in keyof T as[T[K]] extends [never] ? never : K]: T[K];
-};
-
-export type Narrower<T, U> = T extends U ? T : U extends T ? U : never;
-
 type TypedNodes = {
     [K in keyof typeof SyntaxKind]: Node & { kind: typeof SyntaxKind[K]; };
 };
@@ -668,7 +660,7 @@ type InvalidTypes = keyof {
     [K in keyof UnmappedNodeTypes as[UnmappedNodeTypes[K]] extends [never] ? K : never]: never;
 };
 
-export type MappedNodeTypes = {
+type MappedNodeTypes = {
     [K in keyof UnmappedNodeTypes as [UnmappedNodeTypes[K]] extends [never] ? never : K]: MapNode<UnmappedNodeTypes[K]>;
 };
 
