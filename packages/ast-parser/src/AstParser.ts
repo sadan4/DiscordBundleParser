@@ -1,7 +1,6 @@
 import { Format } from "@sadan4/devtools-pretty-printer";
 import { collectVariableUsage, type VariableInfo } from "ts-api-utils";
 import {
-    type CallExpression,
     createSourceFile,
     type Expression,
     type Identifier,
@@ -132,10 +131,6 @@ export class AstParser {
         if (arr.length !== 0)
             return arr;
         logger.debug("[AstParser] Failed finding variable declaration");
-    }
-
-    public isCallExpression(node: Node | undefined): node is CallExpression {
-        return node?.kind === SyntaxKind.CallExpression;
     }
 
     /**
