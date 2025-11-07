@@ -9,6 +9,7 @@ import {
     isArrowFunction,
     isCallExpression,
     isFunctionExpression,
+    isIdentifier,
     isNamespaceImport,
     isObjectLiteralExpression,
     isPropertyAssignment,
@@ -172,7 +173,7 @@ export class VencordAstParser extends AstParser {
             for (const span of node.templateSpans) {
                 const spanExpr = span.expression;
 
-                if (!this.isIdentifier(spanExpr)) {
+                if (!isIdentifier(spanExpr)) {
                     logger.debug(`[VencordAstParser] Trying to parse template literal with non-identifier span: ${span.getText()}, FileName: ${span.getSourceFile().fileName}`);
                     break tryParse;
                 }

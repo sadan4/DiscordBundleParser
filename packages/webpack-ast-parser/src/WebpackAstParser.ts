@@ -370,7 +370,7 @@ export class WebpackAstParser extends AstParser {
 
         let [requiredModule, ...names] = importChain;
 
-        if (!this.isIdentifier(requiredModule))
+        if (!isIdentifier(requiredModule))
             return;
 
         const dec = this.getVarInfoFromUse(requiredModule);
@@ -470,7 +470,7 @@ export class WebpackAstParser extends AstParser {
             return;
         }
 
-        if (!this.isIdentifier(requiredModule))
+        if (!isIdentifier(requiredModule))
             return;
 
         const dec = this.getVarInfoFromUse(requiredModule);
@@ -547,7 +547,7 @@ export class WebpackAstParser extends AstParser {
 
         const [imported, ...chain] = this.flattenPropertyAccessExpression(last) ?? [];
 
-        if (!this.isIdentifier(imported) || chain.length === 0)
+        if (!imported || !isIdentifier(imported) || chain.length === 0)
             return;
 
         const importedId = this.getIdOfImportedVar(imported);
@@ -936,7 +936,7 @@ export class WebpackAstParser extends AstParser {
 
         const ret = findParent(uses?.location, isVariableDeclaration)?.name;
 
-        if (this.isIdentifier(ret))
+        if (ret && isIdentifier(ret))
             return ret;
     }
 
@@ -1660,7 +1660,7 @@ export class WebpackAstParser extends AstParser {
 
             const valueInit = valueProp.initializer;
 
-            if (!this.isIdentifier(valueInit)) {
+            if (!isIdentifier(valueInit)) {
                 continue;
             }
 

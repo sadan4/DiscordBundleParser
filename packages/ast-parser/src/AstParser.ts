@@ -417,10 +417,6 @@ export class AstParser {
         );
     }
 
-    public isIdentifier(node: Node | undefined): node is Identifier {
-        return !!node && isIdentifier(node);
-    }
-
     /**
      * Converts the position to a zero-based offset.
      * Invalid positions are adjusted as described in {@link Position.line}
