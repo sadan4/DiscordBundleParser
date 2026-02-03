@@ -74,6 +74,11 @@ describe(
 
                 commonTests(parser);
             });
+            describe("with full file", function () {
+                const parser = fullParser;
+
+                commonTests(parser, DELAY);
+            });
         });
     },
 );
