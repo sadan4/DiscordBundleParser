@@ -79,6 +79,14 @@ describe(
 
                 commonTests(parser, DELAY);
             });
+            describe("fullFile results are the same as partFile results", function () {
+                it("js chunk hashes match", function () {
+                    const full = fullParser.getJsChunkHashes().toSorted();
+                    const part = partParser.getJsChunkHashes().toSorted();
+
+                    expect(full).to.deep.equal(part);
+                });
+            });
         });
     },
 );
