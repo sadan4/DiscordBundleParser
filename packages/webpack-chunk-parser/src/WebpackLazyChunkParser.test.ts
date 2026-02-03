@@ -21,7 +21,7 @@ describe("LazyChunkParser", function () {
             const parser = new WebpackLazyChunkParser(getFile("lazyChunk.js"));
             const { chunkId } = parser;
 
-            expect(chunkId).toMatchSnapshot();
+            expect(chunkId).toMatchInlineSnapshot(`"24314"`);
         });
     });
     describe("new format", () => {
@@ -30,6 +30,18 @@ describe("LazyChunkParser", function () {
             const modules = parser.getDefinedModules();
 
             expect(modules).toMatchSnapshot();
+        });
+        it("gets modules from an i18n chunk", () => {
+            const parser = new WebpackLazyChunkParser(getFile("lazyChunk2-i18n.js"));
+            const modules = parser.getDefinedModules();
+
+            expect(modules).toMatchSnapshot();
+        });
+        it("gets chunk id from a lazy chunk", () => {
+            const parser = new WebpackLazyChunkParser(getFile("lazyChunk2.js"));
+            const { chunkId } = parser;
+
+            expect(chunkId).toMatchInlineSnapshot(`"52694"`);
         });
     });
 });

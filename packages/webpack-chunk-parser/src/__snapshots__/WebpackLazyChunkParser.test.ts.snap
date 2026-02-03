@@ -914,3 +914,63 @@ exports[`LazyChunkParser > new format > gets modules from a lazy chunk 1`] = `
     }",
 }
 `;
+
+exports[`LazyChunkParser > new format > gets modules from an i18n chunk 1`] = `
+{
+  "244292": "244292(e,a,t){t.r(a),t.d(a,{default:()=>s});let s=JSON.parse('{"o/An3l":[[1,"username"]," asked you to stream ",[1,"applicationName"]],"DKHhec":["Ask to Stream"],"8qq+H7":["Ask to Stream ",[1,"applicationName"]],"s7bMT0":[[1,"username"]," is asking you to stream ",[1,"applicationName"]],"7pndSl":["You asked someone to stream ",[1,"applicationName"]],"P0wwmM":["Already streaming"],"u4QmWl":["Request expired"],"qRXats":["Not in voice channel"],"43zohO":["Not running game"],"fac+eE":["No permission"],"8HU1M2":["Request sent"],"5+172e":["Stream"],"nAyuPp":["Stream Request"],"d/qbC0":[[1,"username"]," asked you to stream"],"8B3U5O":["You asked someone to stream"],"UGbmBp":["Stream"],"jTbTAF":[[8,"$b",[[1,"username"]]]," wants to watch you play ",[8,"$b",[[1,"game"]]],"."]}')}",
+}
+`;
+
+exports[`LazyChunkParser > old format > gets modules from a lazy chunk 1`] = `
+{
+  "805388": "function(e, t, n) {
+        n.r(t),
+        n.d(t, {
+            default: () => b,
+            messagesLoader: () => i
+        });
+        let {createLoader: h} = n(631562)
+          , i = h({
+            bg: () => n.e("19885").then(n.t.bind(n, 867764, 19)),
+            cs: () => n.e("72167").then(n.t.bind(n, 540434, 19)),
+            da: () => n.e("12885").then(n.t.bind(n, 511793, 19)),
+            de: () => n.e("33594").then(n.t.bind(n, 221245, 19)),
+            el: () => n.e("62725").then(n.t.bind(n, 980617, 19)),
+            "en-GB": () => n.e("83348").then(n.t.bind(n, 7502, 19)),
+            "es-419": () => n.e("32757").then(n.t.bind(n, 386017, 19)),
+            "es-ES": () => n.e("60759").then(n.t.bind(n, 58662, 19)),
+            fi: () => n.e("45808").then(n.t.bind(n, 218284, 19)),
+            fr: () => n.e("93855").then(n.t.bind(n, 436151, 19)),
+            hi: () => n.e("27530").then(n.t.bind(n, 843097, 19)),
+            hr: () => n.e("4710").then(n.t.bind(n, 861356, 19)),
+            hu: () => n.e("15330").then(n.t.bind(n, 120482, 19)),
+            it: () => n.e("11753").then(n.t.bind(n, 409162, 19)),
+            ja: () => n.e("89302").then(n.t.bind(n, 438827, 19)),
+            ko: () => n.e("38518").then(n.t.bind(n, 236515, 19)),
+            lt: () => n.e("81793").then(n.t.bind(n, 974833, 19)),
+            nl: () => n.e("81574").then(n.t.bind(n, 47566, 19)),
+            no: () => n.e("84084").then(n.t.bind(n, 742537, 19)),
+            pl: () => n.e("33504").then(n.t.bind(n, 657329, 19)),
+            "pt-BR": () => n.e("5374").then(n.t.bind(n, 601554, 19)),
+            ro: () => n.e("867").then(n.t.bind(n, 140146, 19)),
+            ru: () => n.e("76726").then(n.t.bind(n, 922980, 19)),
+            "sv-SE": () => n.e("82252").then(n.t.bind(n, 178214, 19)),
+            th: () => n.e("54597").then(n.t.bind(n, 989223, 19)),
+            tr: () => n.e("54521").then(n.t.bind(n, 153100, 19)),
+            uk: () => n.e("8670").then(n.t.bind(n, 144045, 19)),
+            vi: () => n.e("56483").then(n.t.bind(n, 801654, 19)),
+            "zh-CN": () => n.e("21340").then(n.t.bind(n, 959724, 19)),
+            "zh-TW": () => n.e("81989").then(n.t.bind(n, 385563, 19)),
+            "en-US": () => n.e("97695").then(n.bind(n, 692501))
+        }, "en-US")
+          , {makeMessagesProxy: d} = n(631562)
+          , b = d(i)
+    }",
+}
+`;
+
+exports[`LazyChunkParser > old format > gets modules from an i18n chunk 1`] = `
+{
+  "287157": "function(e){e.exports=JSON.parse('{"SX6+w5":["\\xd6zel Temalar"],"+tTysq":["Renk ekle"],"JUQcdT":["Renk Ekle"],"o2NfLF":["G\\xf6r\\xfcn\\xfcm"],"CARxAC":["Discord\\'unu tam istediğin gibi yap"],"f/cLEi":["Discord\\'unu ",[8,"$i",["tam tamına"]]," istediğin gibi yap"],"nla4RG":["Discord\\'u benzersiz kılacak kendi \\xf6zel temanı oluştur. Sadece Nitro ile."],"SFyHIP":["\\xd6nce renkleri ekle"],"8ZcEfj":["Renkler"],"uSL2Gy":["Renkler"],"F1t0c8":["Kontroller"],"fQPSEf":[[1,"username"]," tarafından oluşturuldu"],"Dk+OWY":["Koyu Mod"],"xlXkaL":["Renk Yoğunluğu"],"dZkwgx":["Gradyan Y\\xf6n\\xfc"],"AsmU85":["Temanı \\xf6zelleştir"],"8QXO8g":["Ekrandan bir renk se\\xe7"],"NCFz+N":["\\xd6rnek Renk"],"Q5kOo8":["Renk Se\\xe7ici"],"5vlJkY":["A\\xe7ık Mod"],"61KGad":["Maksimum sayıda renk eklendi"],"3ej1LT":["\\xd6zel tema \\xf6n izleme"],"qZMUoL":["Teman t\\xfcm Discord cihazlarında bu şekilde g\\xf6r\\xfcnecek."],"v15Ipv":["Senkronizasyon a\\xe7ıkken masa\\xfcst\\xfcnde oluşturulan \\xf6zel temalar [Beta] mobil temanı etkileyebilir. ",[8,"$link",["Buradan daha fazla bilgi edin."],[[1,"helpdeskArticle"]]]],"xRdYAX":["\\xd6zel temalar [Beta], mobilde mevcut değil."],"yl1iMm":["\\xd6zel Tema"],"XokIHM":["Senin istemcin. Herhangi bir renk."],"7esQMC":["Discord siyah ve beyaz olmak zorunda değil. Kendi \\xf6zel temanı oluşturarak Discord\\'u benzersiz kıl."],"pNDHQf":["Beni Oraya G\\xf6t\\xfcr"],"76L4b7":["Senin istemcin. Senin rengin."],"i3n50h":["Discord\\'u benzersiz kılacak kendi \\xf6zel temanı oluştur. Sadece Nitro ile."],"WNjeP1":["Temanı masa\\xfcst\\xfcnde tasarla, sonra senkronize et ve t\\xfcm cihazlarında keyfini \\xe7ıkar. ",[8,"$link",["Daha fazla bilgi edin."],[[1,"helpdeskArticle"]]]],"KSBBpC":["\\xd6zel Tema"],"2hAz8b":["Temanı \\xf6zelleştir"],"23QUzv":["Yeni! \\xd6zel Temalar"],"UV/Vtv":["Ruh h\\xe2line uygun sonsuz renk kombinasyonları seni bekliyor. Hemen dene!"],"TRCE4g":["Ruh h\\xe2line uygun sonsuz renk kombinasyonları seni bekliyor. Nitro ile şimdi dene."],"XP4jzJ":["Kendi temanı oluştur"],"MJYvmG":["Sonsuz renk kombinasyonlarıyla alanını stilize et."],"rTik5y":["Rengi kaldır"],"5uAd+V":["Temanı paylaş!"],"wBQRzZ":["Arkadaşlarının Discord\\'undaki ayarları seninkilerle eşleştir."],"zgFs8C":["\\xd6zel temayı paylaş"],"q2lO16":["Yaptığım bu sevimli temayı incele"],"c9MBEH":["Beni Şaşırt!"],"6pabtR":["Rastgele bir temadan ilham al"],"NJ9m8Y":["Nereden başlayacağından emin değil misin?"],"eGxkmm":["Hemen Dene"]}')}",
+}
+`;
