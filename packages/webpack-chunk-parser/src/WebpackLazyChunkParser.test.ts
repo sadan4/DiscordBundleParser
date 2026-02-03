@@ -11,7 +11,7 @@ describe("LazyChunkParser", function () {
         expect(modules).toMatchSnapshot();
     });
     it("gets modules from an i18n chunk", function () {
-        const parser = new WebpackLazyChunkParser(getFile("lazyChunk2.js"));
+        const parser = new WebpackLazyChunkParser(getFile("lazyChunk-i18n.js"));
         const modules = parser.getDefinedModules();
 
         expect(modules).toMatchSnapshot();
