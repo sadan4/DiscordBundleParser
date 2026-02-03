@@ -3,6 +3,8 @@ import { assert, describe, expect, it } from "vitest";
 import { getFile } from "./__test__/testingUtil";
 import { WebpackMainChunkParser } from "./WebpackMainChunkParser";
 
+const DELAY = 30_000;
+
 describe(
     "MainChunkParser",
     function () {
@@ -40,26 +42,37 @@ describe(
                 expect(keys).toMatchSnapshot();
             });
         }
+        describe("old rspack format", () => {
+            const fullParser = new WebpackMainChunkParser(getFile("fullWeb.js"));
+            const partParser = new WebpackMainChunkParser(getFile("partWeb.js"));
 
-        const fullParser = new WebpackMainChunkParser(getFile("fullWeb.js"));
-        const partParser = new WebpackMainChunkParser(getFile("partWeb.js"));
+            describe("with partial file", function () {
+                const parser = partParser;
 
-        describe("with partial file", function () {
-            const parser = partParser;
+                commonTests(parser);
+            });
+            describe("with full file", function () {
+                const parser = fullParser;
 
-            commonTests(parser);
+                commonTests(parser, DELAY);
+            });
+            describe("fullFile results are the same as partFile results", function () {
+                it("js chunk hashes match", function () {
+                    const full = fullParser.getJsChunkHashes().toSorted();
+                    const part = partParser.getJsChunkHashes().toSorted();
+
+                    expect(full).to.deep.equal(part);
+                });
+            });
         });
-        describe("with full file", function () {
-            const parser = fullParser;
+        describe("new rspack format", () => {
+            const fullParser = new WebpackMainChunkParser(getFile("fullWeb2.js"));
+            const partParser = new WebpackMainChunkParser(getFile("partWeb2.js"));
 
-            commonTests(parser, 30_000);
-        });
-        describe("fullFile results are the same as partFile results", function () {
-            it("js chunk hashes match", function () {
-                const full = fullParser.getJsChunkHashes().toSorted();
-                const part = partParser.getJsChunkHashes().toSorted();
+            describe("with partial file", function () {
+                const parser = partParser;
 
-                expect(full).to.deep.equal(part);
+                commonTests(parser);
             });
         });
     },
