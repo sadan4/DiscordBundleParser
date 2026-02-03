@@ -18,5 +18,6 @@
   "exclude": [
     "src/__test__/*.js",
     "src/**.test.ts",
+    "src/WebpackMainChunkParser.test",
   ],
 }

@@ -34,7 +34,8 @@
     ],
     "include": [
         "packages/**/*.test.ts",
-        "packages/**/__test__/testingUtil.ts"
+        "packages/**/__test__/testingUtil.ts",
+        "packages/webpack-chunk-parser/src/WebpackMainChunkParser.test/**.ts",
     ],
     "exclude": [
         "node_modules"
