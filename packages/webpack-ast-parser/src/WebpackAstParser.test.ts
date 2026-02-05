@@ -529,6 +529,14 @@ describe("WebpackAstParser", function () {
                     },
                 });
             });
+            it("store using libdiscore", function () {
+                const parser = new WebpackAstParser(getFile("webpack/stores/store-libdiscore-1.js"));
+                const map = parser.getExportMap();
+
+                expect(map).to.deep.equal({
+
+                });
+            });
             it.skip("generates the proper export map for a store exported with wreq.t", function () {
                 // I've never seen a store exported with wreq.t
             });
