@@ -539,7 +539,7 @@ describe("WebpackAstParser", function () {
                 const parser = new WebpackAstParser(getFile("webpack/stores/store-static-displayName.js"));
                 const map = parser.getExportMap();
 
-                expect(map);
+                expect(map).toMatchSnapshot();
             });
             it.skip("generates the proper export map for a store exported with wreq.t", function () {
                 // I've never seen a store exported with wreq.t

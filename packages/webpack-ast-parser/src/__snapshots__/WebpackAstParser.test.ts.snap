@@ -687,3 +687,356 @@ exports[`WebpackAstParser > export parsing > e.exports > parses a module with an
   ],
 }
 `;
+
+exports[`WebpackAstParser > export parsing > stores > store using libdiscore 1`] = `
+{
+  "A": {
+    "getGuildCount": [
+      [
+        {
+          "character": 8,
+          "line": 71,
+        },
+        {
+          "character": 21,
+          "line": 71,
+        },
+      ],
+    ],
+    "stateWrapper": [
+      [
+        {
+          "character": 8,
+          "line": 68,
+        },
+        {
+          "character": 20,
+          "line": 68,
+        },
+      ],
+    ],
+    Symbol(CommonJS Default Export): [
+      [
+        {
+          "character": 8,
+          "line": 4,
+        },
+        {
+          "character": 9,
+          "line": 4,
+        },
+      ],
+      [
+        {
+          "character": 16,
+          "line": 88,
+        },
+        {
+          "character": 17,
+          "line": 88,
+        },
+      ],
+      [
+        {
+          "character": 10,
+          "line": 67,
+        },
+        {
+          "character": 11,
+          "line": 67,
+        },
+      ],
+      [
+        {
+          "character": 8,
+          "line": 74,
+        },
+        {
+          "character": 9,
+          "line": 85,
+        },
+      ],
+    ],
+    Symbol(WebpackAstParser.Hover): "GuildStore",
+  },
+}
+`;
+
+exports[`WebpackAstParser > export parsing > stores > store with static properties 1`] = `
+{
+  "ASSISTANT_WUMPUS_VOICE_USER": {
+    Symbol(WebpackAstParser.Hover): ""47835198259242069"",
+    Symbol(CommonJS Default Export): [
+      [
+        {
+          "character": 8,
+          "line": 6,
+        },
+        {
+          "character": 35,
+          "line": 6,
+        },
+      ],
+      [
+        {
+          "character": 12,
+          "line": 35,
+        },
+        {
+          "character": 31,
+          "line": 35,
+        },
+      ],
+    ],
+  },
+  "default": {
+    "LATEST_SNAPSHOT_VERSION": {
+      Symbol(WebpackAstParser.Hover): "1",
+      Symbol(CommonJS Default Export): [
+        [
+          {
+            "character": 41,
+            "line": 594,
+          },
+          {
+            "character": 42,
+            "line": 594,
+          },
+        ],
+      ],
+    },
+    "filter": [
+      [
+        {
+          "character": 8,
+          "line": 710,
+        },
+        {
+          "character": 14,
+          "line": 710,
+        },
+      ],
+    ],
+    "findByTag": [
+      [
+        {
+          "character": 8,
+          "line": 703,
+        },
+        {
+          "character": 17,
+          "line": 703,
+        },
+      ],
+    ],
+    "forEach": [
+      [
+        {
+          "character": 8,
+          "line": 698,
+        },
+        {
+          "character": 15,
+          "line": 698,
+        },
+      ],
+    ],
+    "getCurrentUser": [
+      [
+        {
+          "character": 8,
+          "line": 720,
+        },
+        {
+          "character": 22,
+          "line": 720,
+        },
+      ],
+    ],
+    "getUser": [
+      [
+        {
+          "character": 8,
+          "line": 691,
+        },
+        {
+          "character": 15,
+          "line": 691,
+        },
+      ],
+    ],
+    "getUserStoreVersion": {
+      Symbol(WebpackAstParser.Hover): "0",
+      Symbol(CommonJS Default Export): [
+        [
+          {
+            "character": 12,
+            "line": 34,
+          },
+          {
+            "character": 13,
+            "line": 34,
+          },
+        ],
+      ],
+    },
+    "getUsers": [
+      [
+        {
+          "character": 8,
+          "line": 695,
+        },
+        {
+          "character": 16,
+          "line": 695,
+        },
+      ],
+    ],
+    "handleLoadCache": [
+      [
+        {
+          "character": 8,
+          "line": 676,
+        },
+        {
+          "character": 23,
+          "line": 676,
+        },
+      ],
+    ],
+    "initialize": [
+      [
+        {
+          "character": 8,
+          "line": 664,
+        },
+        {
+          "character": 18,
+          "line": 664,
+        },
+      ],
+    ],
+    "takeSnapshot": [
+      [
+        {
+          "character": 8,
+          "line": 667,
+        },
+        {
+          "character": 20,
+          "line": 667,
+        },
+      ],
+    ],
+    Symbol(CommonJS Default Export): [
+      [
+        {
+          "character": 8,
+          "line": 7,
+        },
+        {
+          "character": 15,
+          "line": 7,
+        },
+      ],
+      [
+        {
+          "character": 17,
+          "line": 724,
+        },
+        {
+          "character": 19,
+          "line": 724,
+        },
+      ],
+      [
+        {
+          "character": 10,
+          "line": 592,
+        },
+        {
+          "character": 12,
+          "line": 592,
+        },
+      ],
+      [
+        {
+          "character": 8,
+          "line": 595,
+        },
+        {
+          "character": 9,
+          "line": 663,
+        },
+      ],
+    ],
+    Symbol(WebpackAstParser.Hover): "UserStore",
+  },
+  "mergeUser": [
+    [
+      {
+        "character": 8,
+        "line": 8,
+      },
+      {
+        "character": 17,
+        "line": 8,
+      },
+    ],
+    [
+      {
+        "character": 13,
+        "line": 128,
+      },
+      {
+        "character": 14,
+        "line": 128,
+      },
+    ],
+  ],
+  "transformUser": [
+    [
+      {
+        "character": 8,
+        "line": 9,
+      },
+      {
+        "character": 21,
+        "line": 9,
+      },
+    ],
+    [
+      {
+        "character": 13,
+        "line": 71,
+      },
+      {
+        "character": 14,
+        "line": 71,
+      },
+    ],
+  ],
+  "users": [
+    [
+      {
+        "character": 8,
+        "line": 10,
+      },
+      {
+        "character": 13,
+        "line": 10,
+      },
+    ],
+    [
+      {
+        "character": 15,
+        "line": 10,
+      },
+      {
+        "character": 20,
+        "line": 10,
+      },
+    ],
+  ],
+}
+`;
