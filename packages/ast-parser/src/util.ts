@@ -1,3 +1,4 @@
+import { isStaticKeyword } from "ts-api-utils";
 import {
     type AssignmentExpression,
     type AssignmentOperatorToken,
@@ -40,6 +41,7 @@ import {
     type ObjectLiteralExpression,
     type PlusToken,
     type PropertyAccessExpression,
+    type PropertyDeclaration,
     type SourceFile,
     SyntaxKind,
     type SyntaxList,
@@ -554,4 +556,16 @@ export function isCommaExpression(node: Node): node is
       readonly operatorToken: Token<SyntaxKind.CommaToken>;
   } {
     return isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.CommaToken;
+}
+
+export function isInExpression(node: Node): node is
+  & BinaryExpression
+  & {
+      readonly operatorToken: Token<SyntaxKind.InKeyword>;
+  } {
+    return isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.InKeyword;
+}
+
+export function isStatic(item: PropertyDeclaration): boolean {
+    return item.modifiers?.some((mod) => isStaticKeyword(mod)) ?? false;
 }

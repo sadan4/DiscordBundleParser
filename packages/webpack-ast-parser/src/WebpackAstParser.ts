@@ -59,6 +59,7 @@ import {
     isEmptyObjectLiteral,
     isFunctionish,
     isLiteralish,
+    isStatic,
     isSyntaxList,
     isVariableAssignmentLike,
     lastParent,
@@ -1806,7 +1807,6 @@ export class WebpackAstParser extends AstParser {
             logger.debug("[WebpackAstParser] Store class does not extend Store");
             return;
         }
-        ret[WebpackAstParser.SYM_HOVER] = this.tryFindStoreDisplayName(storeVarInfo);
 
         for (const member of classDecl.members) {
             if (isMethodDeclaration(member)) {
@@ -1817,11 +1817,20 @@ export class WebpackAstParser extends AstParser {
             } else if (isConstructorDeclaration(member)) {
                 ret.store.push(member);
             } else if (isPropertyDeclaration(member)) {
-                if (!member.initializer) {
+                const { initializer, name } = member;
+
+                if (name.getText() === "displayName"
+                  && initializer
+                  && isStringLiteralLike(initializer)
+                  && isStatic(member)) {
+                    ret[WebpackAstParser.SYM_HOVER] = initializer.text;
+                    continue;
+                }
+                if (!initializer) {
                     logger.warn("Property declaration has no initializer, this should not happen");
                     continue;
                 }
-                ret.props[member.name.getText()] = member.initializer;
+                ret.props[name.getText()] = initializer;
             } else if (isAccessor(member)) {
                 if (!member.body)
                     continue;
@@ -1830,11 +1839,15 @@ export class WebpackAstParser extends AstParser {
                 logger.warn("Unhandled store member type. This should be handled");
             }
         }
+
+        ret[WebpackAstParser.SYM_HOVER] ??= this.tryFindStoreDisplayName(storeVarInfo);
+
+        // sometimes props are defined using `define(this, "prop", value)` in the constructor
         return ret;
     }
 
     tryFindStoreDisplayName(storeVar: VariableInfo): string | undefined {
-        // Display names can be set in two ways:
+        // Display names can be set in three ways:
         // 1. define(store, "displayName", "MyStore")
         // OR sometimes the bundler will inline the function so it will look something like this
         // 2. (i = "displayName")in m ? Object.defineProperty(store, i, {
@@ -1843,6 +1856,8 @@ export class WebpackAstParser extends AstParser {
         //     configurable: !0,
         //     writable: !0
         // }) : store[i] = myStoreNameVar;
+        // 3. static displayName = "MyStore";
+        // This is handled outside of this function in tryParseStore
 
         const uses = storeVar.uses
             .map(({ location }) => {
