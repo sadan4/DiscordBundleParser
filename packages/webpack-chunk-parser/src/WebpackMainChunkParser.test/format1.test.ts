@@ -21,6 +21,9 @@ describe("format 1", () => {
         const parser = fullParser;
 
         mainChunkTests(parser, DELAY);
+        it("finds the build nunmber", () => {
+            expect(parser.getBuildNumber()).toMatchInlineSnapshot(`"440786"`);
+        });
     });
 
     describe("fullFile results are the same as partFile results", function () {

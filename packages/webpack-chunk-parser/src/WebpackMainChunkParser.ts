@@ -9,8 +9,8 @@ import type { JSHashEntry } from "./types";
 import { WebpackChunkParser } from "./WebpackChunkParser";
 
 const BUILD_MODULE_REGEX = /Trying to open a changelog for an invalid build number/;
-const BUILD_NUMBER_REGEX = /parseInt\("(\d+?)"\)/;
-const KNOWN_BUILD_MODULE_IDS: ReadonlyArray<string> = Object.freeze(["128014"]);
+const BUILD_NUMBER_REGEX = /(?:parseInt\("|"Trying to open a changelog for an invalid build number )(\d+?)"\)/;
+const KNOWN_BUILD_MODULE_IDS: ReadonlyArray<string> = Object.freeze(["128014", "446023"]);
 
 export class WebpackMainChunkParser extends WebpackChunkParser {
     @CacheGetter()
