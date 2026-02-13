@@ -1,4 +1,13 @@
-import type { ArrowFunction, FunctionExpression, FunctionLikeDeclaration, Identifier, ModuleExportName, Node } from "typescript";
+import type {
+    ArrowFunction,
+    FunctionExpression,
+    FunctionLikeDeclaration,
+    Identifier,
+    ModifierLike,
+    ModuleExportName,
+    Node,
+    NodeArray,
+} from "typescript";
 
 export type Functionish = FunctionLikeDeclaration | ArrowFunction | FunctionExpression;
 export type AnyFunction = FunctionExpression | ArrowFunction;
@@ -29,3 +38,6 @@ export type WithParent<N, P> = Omit<N, "parent"> & {
     parent: P;
 };
 
+export interface MightHaveModifiers extends Node {
+    modifiers?: NodeArray<ModifierLike>;
+}

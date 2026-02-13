@@ -25,9 +25,8 @@ import { type Logger, NoopLogger } from "@vencord-companion/shared/Logger";
 import { type IPosition, Position } from "@vencord-companion/shared/Position";
 import { Range } from "@vencord-companion/shared/Range";
 
-import type { StringifiedModule } from "./StringifiedModule";
 import type { Functionish } from "./types";
-import { CharCode, findParent, getTokenAtPosition, isAssignmentExpression, isEOL } from "./util";
+import { CharCode, findParent, getTokenAtPosition, isAssignmentExpression, isEOL, type StringifiedModule } from "./util";
 
 let logger: Logger = NoopLogger;
 

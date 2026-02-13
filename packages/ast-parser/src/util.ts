@@ -1,10 +1,11 @@
-import { isStaticKeyword } from "ts-api-utils";
 import {
     type AssignmentExpression,
     type AssignmentOperatorToken,
     type BinaryExpression,
     type Block,
+    type DeclareKeyword,
     type DefaultKeyword,
+    type ExportKeyword,
     forEachChild,
     type Identifier,
     type ImportClause,
@@ -14,6 +15,7 @@ import {
     isBlock,
     isConstructorDeclaration,
     isExpressionStatement,
+    isExternalModule,
     isFunctionDeclaration,
     isFunctionExpression,
     isGetAccessorDeclaration,
@@ -37,19 +39,22 @@ import {
     type LiteralToken,
     type NamespaceImport,
     type Node,
+    type NumericLiteral,
     type ObjectLiteralElementLike,
     type ObjectLiteralExpression,
     type PlusToken,
     type PropertyAccessExpression,
     type PropertyDeclaration,
     type SourceFile,
+    type StaticKeyword,
+    type StringLiteralLike,
     SyntaxKind,
     type SyntaxList,
     type Token,
     type VariableDeclaration,
 } from "typescript";
 
-import type { AnyFunction, AssertedType, CBAssertion, Functionish, Import, WithParent } from "./types";
+import type { AnyFunction, AssertedType, CBAssertion, Functionish, Import, MightHaveModifiers, WithParent } from "./types";
 
 export const enum CharCode {
     /**
@@ -289,10 +294,6 @@ export function isNamespaceImport(x: Identifier): x is WithParent<typeof x, Name
     return _TS_isNamespaceImport(x.parent);
 }
 
-export function isDefaultKeyword(n: Node): n is DefaultKeyword {
-    return n.kind === SyntaxKind.DefaultKeyword;
-}
-
 
 export function isSyntaxList(node: Node): node is SyntaxList {
     return node.kind === SyntaxKind.SyntaxList;
@@ -329,10 +330,17 @@ function _findReturnPropertyAccessExpression(func: Block): PropertyAccessExpress
     return lastStatment.expression;
 }
 
+/**
+ * does not handle big int literals
+ */
+export function isStringOrNumericLiteral(node: Node): node is StringLiteralLike | NumericLiteral {
+    return isStringLiteralLike(node) || isNumericLiteral(node);
+}
+
 export function tryParseStringOrNumberLiteral(node: Node | undefined): string | undefined {
     if (!node)
         return;
-    if (isStringLiteralLike(node) || isNumericLiteral(node)) {
+    if (isStringOrNumericLiteral(node)) {
         return node.text;
     }
 }
@@ -566,6 +574,76 @@ export function isInExpression(node: Node): node is
     return isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.InKeyword;
 }
 
+export function isDefaultKeyword(n: Node): n is DefaultKeyword {
+    return n.kind === SyntaxKind.DefaultKeyword;
+}
+
+export function isStaticKeyword(node: Node): node is StaticKeyword {
+    return node.kind === SyntaxKind.StaticKeyword;
+}
+
+export function isExportKeyword(node: Node): node is ExportKeyword {
+    return node.kind === SyntaxKind.ExportKeyword;
+}
+
+export function isDeclareKeyword(node: Node): node is DeclareKeyword {
+    return node.kind === SyntaxKind.DeclareKeyword;
+}
+
 export function isStatic(item: PropertyDeclaration): boolean {
     return item.modifiers?.some((mod) => isStaticKeyword(mod)) ?? false;
+}
+
+// Code largely based on https://github.com/ajafff/tsutils
+// Original license: https://github.com/ajafff/tsutils/blob/26b195358ec36d59f00333115aa3ffd9611ca78b/LICENSE
+
+/**
+ * Is the node a scope boundary, specifically due to it being a function.
+ * @category Scope Utilities
+ * @example
+ * ```ts
+ * declare const node: ts.Node;
+ *
+ * if (isFunctionScopeBoundary(node)) {
+ *   // ...
+ * }
+ * ```
+ */
+export function isFunctionScopeBoundary(node: Node): boolean {
+    switch (node.kind) {
+        case SyntaxKind.ArrowFunction:
+        case SyntaxKind.CallSignature:
+        case SyntaxKind.ClassDeclaration:
+        case SyntaxKind.ClassExpression:
+        case SyntaxKind.Constructor:
+        case SyntaxKind.ConstructorType:
+        case SyntaxKind.ConstructSignature:
+        case SyntaxKind.EnumDeclaration:
+        case SyntaxKind.FunctionDeclaration:
+        case SyntaxKind.FunctionExpression:
+        case SyntaxKind.FunctionType:
+        case SyntaxKind.GetAccessor:
+        case SyntaxKind.MethodDeclaration:
+        case SyntaxKind.MethodSignature:
+        case SyntaxKind.ModuleDeclaration:
+        case SyntaxKind.SetAccessor:
+            return true;
+        case SyntaxKind.SourceFile:
+            // if SourceFile is no module, it contributes to the global scope and is therefore no scope boundary
+            return isExternalModule(node as SourceFile);
+        default:
+            return false;
+    }
+}
+
+export function hasExportModifier(node: MightHaveModifiers): boolean {
+    return node.modifiers?.some(isExportKeyword) ?? false;
+}
+
+export function isAmbientDeclaration(node: MightHaveModifiers): boolean {
+    return node.modifiers?.some(isDeclareKeyword) ?? false;
+}
+
+export interface StringifiedModule {
+    content: string;
 }

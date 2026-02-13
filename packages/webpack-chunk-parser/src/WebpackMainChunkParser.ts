@@ -1,8 +1,31 @@
 import type { VariableInfo } from "ts-api-utils";
-import { type Expression, isArrowFunction, isCallExpression, isElementAccessExpression, isIdentifier, isNumericLiteral, isObjectLiteralExpression, isPropertyAccessExpression, isPropertyAssignment, isStringLiteralLike, isVariableDeclaration, type ObjectLiteralElementLike, type ObjectLiteralExpression, type PropertyName } from "typescript";
+import {
+    type Expression,
+    isArrowFunction,
+    isCallExpression,
+    isElementAccessExpression,
+    isIdentifier,
+    isObjectLiteralExpression,
+    isPropertyAccessExpression,
+    isPropertyAssignment,
+    isStringLiteralLike,
+    isVariableDeclaration,
+    type ObjectLiteralElementLike,
+    type ObjectLiteralExpression,
+    type PropertyName,
+} from "typescript";
 
 import type { Functionish } from "@vencord-companion/ast-parser/types";
-import { findParent, isAssignmentExpression, isBinaryPlusExpression, isFunctionish, lastChild, nonNull, tryParseStringOrNumberLiteral } from "@vencord-companion/ast-parser/util";
+import {
+    findParent,
+    isAssignmentExpression,
+    isBinaryPlusExpression,
+    isFunctionish,
+    isStringOrNumericLiteral,
+    lastChild,
+    nonNull,
+    tryParseStringOrNumberLiteral,
+} from "@vencord-companion/ast-parser/util";
 import { Cache, CacheGetter } from "@vencord-companion/shared/decorators";
 
 import type { JSHashEntry } from "./types";
@@ -11,10 +34,6 @@ import { WebpackChunkParser } from "./WebpackChunkParser";
 const BUILD_MODULE_REGEX = /Trying to open a changelog for an invalid build number/;
 const BUILD_NUMBER_REGEX = /(?:parseInt\("|"Trying to open a changelog for an invalid build number )(\d+?)"\)/;
 const KNOWN_BUILD_MODULE_IDS: ReadonlyArray<string> = Object.freeze(["128014", "446023"]);
-
-function isValidModuleId(id: Expression) {
-    return isStringLiteralLike(id) || isNumericLiteral(id);
-}
 
 export class WebpackMainChunkParser extends WebpackChunkParser {
     @CacheGetter()
@@ -152,7 +171,8 @@ export class WebpackMainChunkParser extends WebpackChunkParser {
 
             const [maybeId] = call.arguments;
 
-            if (!isValidModuleId(maybeId)) {
+            // if !isValidModuleId
+            if (!isStringOrNumericLiteral(maybeId)) {
                 continue;
             }
 
