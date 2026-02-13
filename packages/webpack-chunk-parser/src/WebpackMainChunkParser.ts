@@ -1,4 +1,3 @@
-import type { VariableInfo } from "ts-api-utils";
 import {
     type Expression,
     isArrowFunction,
@@ -15,6 +14,7 @@ import {
     type PropertyName,
 } from "typescript";
 
+import type { VariableInfo } from "@vencord-companion/ast-parser";
 import type { Functionish } from "@vencord-companion/ast-parser/types";
 import {
     findParent,

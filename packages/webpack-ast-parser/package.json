@@ -27,7 +27,6 @@
     "@vencord-companion/shared": "workspace:*"
   },
   "peerDependencies": {
-    "ts-api-utils": "catalog:",
     "typescript": "catalog:"
   },
   "devDependencies": {

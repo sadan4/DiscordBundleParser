@@ -1,5 +1,4 @@
 import { Format } from "@sadan4/devtools-pretty-printer";
-import { type VariableInfo } from "ts-api-utils";
 import {
     type AssignmentExpression,
     type AssignmentOperatorToken,
@@ -64,6 +63,7 @@ import {
     isVariableAssignmentLike,
     lastParent,
     nonNull,
+    type VariableInfo,
 } from "@vencord-companion/ast-parser";
 import { Cache, CacheGetter } from "@vencord-companion/shared/decorators";
 import { type Logger, NoopLogger } from "@vencord-companion/shared/Logger";

@@ -18,20 +18,12 @@ catalogs:
     '@vitest/ui':
       specifier: ^3.2.4
       version: 3.2.4
-    ts-api-utils:
-      specifier: ^2.1.0
-      version: 2.1.0
     typescript:
       specifier: ^5.0.0
       version: 5.9.3
     vitest:
       specifier: ^3.2.4
       version: 3.2.4
-
-patchedDependencies:
-  ts-api-utils:
-    hash: 345aaf95fe62bd3fbc109183d2d43f9319d340cd32cc554d31dae15f9887dd67
-    path: patches/ts-api-utils.patch
 
 importers:
 
@@ -88,9 +80,6 @@ importers:
       '@vencord-companion/shared':
         specifier: workspace:*
         version: link:../shared
-      ts-api-utils:
-        specifier: 'catalog:'
-        version: 2.1.0(patch_hash=345aaf95fe62bd3fbc109183d2d43f9319d340cd32cc554d31dae15f9887dd67)(typescript@5.9.3)
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
@@ -107,9 +96,6 @@ importers:
       '@vencord-companion/shared':
         specifier: workspace:*
         version: link:../shared
-      ts-api-utils:
-        specifier: 'catalog:'
-        version: 2.1.0(patch_hash=345aaf95fe62bd3fbc109183d2d43f9319d340cd32cc554d31dae15f9887dd67)(typescript@5.9.3)
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
@@ -135,9 +121,6 @@ importers:
       '@vencord-companion/shared':
         specifier: workspace:*
         version: link:../shared
-      ts-api-utils:
-        specifier: 'catalog:'
-        version: 2.1.0(patch_hash=345aaf95fe62bd3fbc109183d2d43f9319d340cd32cc554d31dae15f9887dd67)(typescript@5.9.3)
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
@@ -160,9 +143,6 @@ importers:
       '@vencord-companion/shared':
         specifier: workspace:*
         version: link:../shared
-      ts-api-utils:
-        specifier: 'catalog:'
-        version: 2.1.0(patch_hash=345aaf95fe62bd3fbc109183d2d43f9319d340cd32cc554d31dae15f9887dd67)(typescript@5.9.3)
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
@@ -179,9 +159,6 @@ importers:
       '@vencord-companion/shared':
         specifier: workspace:*
         version: link:../shared
-      ts-api-utils:
-        specifier: 'catalog:'
-        version: 2.1.0(patch_hash=345aaf95fe62bd3fbc109183d2d43f9319d340cd32cc554d31dae15f9887dd67)(typescript@5.9.3)
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
@@ -1919,7 +1896,7 @@ snapshots:
       graphemer: 1.4.0
       ignore: 7.0.5
       natural-compare: 1.4.0
-      ts-api-utils: 2.1.0(patch_hash=345aaf95fe62bd3fbc109183d2d43f9319d340cd32cc554d31dae15f9887dd67)(typescript@5.9.3)
+      ts-api-utils: 2.1.0(typescript@5.9.3)
       typescript: 5.9.3
     transitivePeerDependencies:
       - supports-color
@@ -1961,7 +1938,7 @@ snapshots:
       '@typescript-eslint/utils': 8.45.0(eslint@9.37.0(jiti@2.6.1))(typescript@5.9.3)
       debug: 4.4.3
       eslint: 9.37.0(jiti@2.6.1)
-      ts-api-utils: 2.1.0(patch_hash=345aaf95fe62bd3fbc109183d2d43f9319d340cd32cc554d31dae15f9887dd67)(typescript@5.9.3)
+      ts-api-utils: 2.1.0(typescript@5.9.3)
       typescript: 5.9.3
     transitivePeerDependencies:
       - supports-color
@@ -1979,7 +1956,7 @@ snapshots:
       is-glob: 4.0.3
       minimatch: 9.0.5
       semver: 7.7.2
-      ts-api-utils: 2.1.0(patch_hash=345aaf95fe62bd3fbc109183d2d43f9319d340cd32cc554d31dae15f9887dd67)(typescript@5.9.3)
+      ts-api-utils: 2.1.0(typescript@5.9.3)
       typescript: 5.9.3
     transitivePeerDependencies:
       - supports-color
@@ -2803,7 +2780,7 @@ snapshots:
 
   totalist@3.0.1: {}
 
-  ts-api-utils@2.1.0(patch_hash=345aaf95fe62bd3fbc109183d2d43f9319d340cd32cc554d31dae15f9887dd67)(typescript@5.9.3):
+  ts-api-utils@2.1.0(typescript@5.9.3):
     dependencies:
       typescript: 5.9.3
 

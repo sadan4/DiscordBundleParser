@@ -1,5 +1,5 @@
 import { Format } from "@sadan4/devtools-pretty-printer";
-import { collectVariableUsage, type VariableInfo } from "ts-api-utils";
+// import { collectVariableUsage, type VariableInfo } from "ts-api-utils";
 import {
     createSourceFile,
     type Expression,
@@ -27,6 +27,7 @@ import { Range } from "@vencord-companion/shared/Range";
 
 import type { Functionish } from "./types";
 import { CharCode, findParent, getTokenAtPosition, isAssignmentExpression, isEOL, type StringifiedModule } from "./util";
+import { collectVariableUsage, type VariableInfo } from "./usage";
 
 let logger: Logger = NoopLogger;
 

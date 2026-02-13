@@ -25,7 +25,6 @@
     ".": "./dist/index.js"
   },
   "peerDependencies": {
-    "ts-api-utils": "catalog:",
     "typescript": "catalog:"
   },
   "devDependencies": {

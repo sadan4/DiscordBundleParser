@@ -1,4 +1,3 @@
-import { DeclarationDomain } from "ts-api-utils";
 import {
     type CallExpression,
     createPrinter,
@@ -26,6 +25,7 @@ import {
 
 import {
     AstParser,
+    DeclarationDomain,
     findObjectLiteralByKey,
     findParent,
     getImportName,
