@@ -21,6 +21,7 @@
   "license": "LGPL-3.0-or-later",
   "packageManager": "pnpm@10.15.1",
   "devDependencies": {
+    "@sadan4/tsquery": "^7.1.0",
     "@stylistic/eslint-plugin": "^5.4.0",
     "@types/node": "catalog:",
     "@typescript-eslint/eslint-plugin": "^8.45.0",
